@@ -73,30 +73,30 @@ function useGalleryFetch(subreddit: string) {
   const [after, setAfter] = useState('');
   const [state, dispatch] = useReducer((t) => !t, false);
   const API_LIMIT = 25;
-  useEffect(() => setCount(0), [subreddit]);
   useEffect(() => {
     setLoading(true);
     fetch(
       `https://www.reddit.com/r/${subreddit}/new/.json?limit=${API_LIMIT}&count=${count}&after=${after}`,
     )
       .then((res) => res.json())
-      .then((data: Reddit) => {
-        setCount((prevCount) => prevCount + API_LIMIT);
-        setAfter(data.data.after || '');
-        setImages(
-          data.data.children
-            .map((e) => ({
+      .then((subreddit: Reddit) => {
+        setAfter(subreddit.data.after || '');
+        setImages((prev) => {
+          const next = subreddit.data.children
+            .map((child) => ({
               isVideo:
-                ['youtube.com', 'streamable.com'].includes(e.data.domain) ||
-                e.data.is_video,
-              thumb: e.data.thumbnail,
-              domain: e.data.domain,
-              url: e.data.url,
-              permalink: `https://old.reddit.com${e.data.permalink}`,
-              title: e.data.title,
+                ['youtube.com', 'streamable.com'].includes(child.data.domain) ||
+                child.data.is_video,
+              thumb: child.data.thumbnail,
+              domain: child.data.domain,
+              url: child.data.url,
+              permalink: `https://old.reddit.com${child.data.permalink}`,
+              title: child.data.title,
             }))
-            .filter((i) => !['self', 'default'].includes(i.thumb)),
-        );
+            .filter((i) => !['self', 'default'].includes(i.thumb));
+          return (count === 0 && next) || prev.concat(next);
+        });
+        setCount((prevCount) => prevCount + API_LIMIT);
       })
       .catch(() => setError(true))
       .finally(() => setLoading(false));
@@ -125,7 +125,7 @@ function SubReddit() {
     <>
       <h2>{location}</h2>
       <Gallery images={images} />
-      <button onClick={dispatch}>Next Page</button>
+      <button onClick={dispatch}>More</button>
     </>
   );
 }
