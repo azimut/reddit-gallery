@@ -1,28 +1,43 @@
-import { useState } from 'react';
 import reactLogo from './assets/react.svg';
 import './App.css';
 
-function App() {
-  const [count, setCount] = useState(0);
+function Input({ name, placeholder }: { name: string; placeholder: string | undefined }) {
+  return (
+    <input
+      type="text"
+      name={`${name}`}
+      placeholder={(placeholder && `${placeholder}`) || ''}
+      required
+      autoFocus
+    />
+  );
+}
 
+function Label({ name }: { name: string }) {
+  return <label htmlFor={`${name}`}>{`${name}`}</label>;
+}
+
+function Search({
+  name,
+  placeholder,
+}: {
+  name: string;
+  placeholder: string | undefined;
+}) {
+  return (
+    <form>
+      <Label name={`${name}`} />
+      <Input name={`${name}`} placeholder={`${placeholder}`} />
+    </form>
+  );
+}
+
+function App() {
   return (
     <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Welcome to Hell</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>count is {count}</button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
+      <img src={reactLogo} className="logo react" alt="React logo" />
+      <h1>Reddit Gallery</h1>
+      <Search name="/r/" placeholder="subreddit" />
     </div>
   );
 }
