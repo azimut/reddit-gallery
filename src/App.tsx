@@ -46,13 +46,13 @@ function Welcome() {
     pushLocation(`/r/${inputRef.current.value}`);
   };
   return (
-    <div className="welcome">
+    <main className="welcome">
       <img src={reactLogo} className="logo react" alt="React logo" />
       <h1>Reddit Gallery</h1>
       <form onSubmit={onSubmit}>
         <Search name="subreddit" label="/r/" inputRef={inputRef} />
       </form>
-    </div>
+    </main>
   );
 }
 
@@ -71,7 +71,7 @@ function useGalleryFetch(subreddit: string) {
   const [error, setError] = useState(false);
   const [count, setCount] = useState(0);
   const [after, setAfter] = useState('');
-  const [state, dispatch] = useReducer((t) => !t, false);
+  const [trigger, dispatch] = useReducer((t) => !t, false);
   const API_LIMIT = 25;
   useEffect(() => {
     setLoading(true);
@@ -83,6 +83,7 @@ function useGalleryFetch(subreddit: string) {
         setAfter(subreddit.data.after || '');
         setImages((prev) => {
           const next = subreddit.data.children
+            .filter((i) => !['self', 'default'].includes(i.data.thumbnail))
             .map((child) => ({
               isVideo:
                 ['youtube.com', 'streamable.com'].includes(child.data.domain) ||
@@ -92,38 +93,38 @@ function useGalleryFetch(subreddit: string) {
               url: child.data.url,
               permalink: `https://old.reddit.com${child.data.permalink}`,
               title: child.data.title,
-            }))
-            .filter((i) => !['self', 'default'].includes(i.thumb));
+            }));
           return (count === 0 && next) || prev.concat(next);
         });
         setCount((prevCount) => prevCount + API_LIMIT);
       })
       .catch(() => setError(true))
       .finally(() => setLoading(false));
-  }, [state]);
+  }, [trigger]);
   return { images, loading, error, dispatch };
 }
 
 function Gallery({ images }: { images: Array<PostData> }) {
   return (
-    <div className="port">
+    <main className="port">
       {images.map((i) => (
         <a href={i.url} target="_blank" rel="noreferrer noopener">
           <img src={(i.url.endsWith('.gif') && i.url) || i.thumb} />
         </a>
       ))}
-    </div>
+    </main>
   );
 }
 
 function SubReddit() {
   const [location] = useLocation();
-  const { images, loading, error, dispatch } = useGalleryFetch(location.slice(3));
-  if (loading) return <p>Loading...</p>;
+  const { images, error, dispatch } = useGalleryFetch(location.slice(3));
   if (error) return <p>Error!</p>;
   return (
     <>
-      <h2>{location}</h2>
+      <header>
+        <h2>{location}</h2>
+      </header>
       <Gallery images={images} />
       <button onClick={dispatch}>More</button>
     </>
