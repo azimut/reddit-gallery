@@ -26,7 +26,7 @@ export interface ChildData {
   mod_reason_title?: null;
   gilded?: number;
   clicked?: boolean;
-  title?: string;
+  title: string;
   link_flair_richtext?: any[];
   subreddit_name_prefixed?: string;
   hidden?: boolean;
@@ -116,7 +116,7 @@ export interface ChildData {
   mod_reports?: any[];
   author_patreon_flair?: boolean;
   author_flair_text_color?: FlairTextColor | null;
-  permalink?: string;
+  permalink: string;
   parent_whitelist_status?: WhitelistStatus;
   stickied?: boolean;
   url: string;
