@@ -1,7 +1,8 @@
 import { useLocation, Route } from 'wouter';
 import reactLogo from './assets/react.svg';
 import './App.css';
-import { RefObject, useRef } from 'react';
+import { RefObject, useEffect, useRef, useState } from 'react';
+import { Reddit } from '../src/types';
 
 function Input({
   name,
@@ -55,11 +56,44 @@ function Welcome() {
   );
 }
 
+function useGalleryFetch(subreddit: string) {
+  const [images, setImages] = useState<Array<string>>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  useEffect(() => {
+    setLoading(true);
+    fetch(`https://www.reddit.com/r/${subreddit}/new/.json`)
+      .then((res) => res.json())
+      .then((data: Reddit) =>
+        setImages(
+          data.data.children.map((e) => e.data.thumbnail).filter((i) => i !== 'self'),
+        ),
+      )
+      .catch(() => setError(true))
+      .finally(() => setLoading(false));
+  }, [subreddit]);
+  return { images, loading, error };
+}
+
+function Gallery() {
+  const [location] = useLocation();
+  const { images, loading, error } = useGalleryFetch(location.slice(3));
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error!</p>;
+  return (
+    <ul>
+      {images.map((i) => (
+        <img src={i} />
+      ))}
+    </ul>
+  );
+}
+
 function App() {
   return (
     <div className="App">
       <Route path="/" component={Welcome} />
-      <Route path="/r/:id">{(params) => <h1>{params.id}</h1>}</Route>
+      <Route path="/r/:id" component={Gallery} />
     </div>
   );
 }
