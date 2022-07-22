@@ -74,7 +74,7 @@ export interface ChildData {
   removed_by_category?: null;
   banned_by?: null;
   author_flair_type?: FlairType;
-  domain?: string;
+  domain: string;
   allow_live_comments?: boolean;
   selftext_html?: null | string;
   likes?: null;
@@ -119,12 +119,12 @@ export interface ChildData {
   permalink?: string;
   parent_whitelist_status?: WhitelistStatus;
   stickied?: boolean;
-  url?: string;
+  url: string;
   subreddit_subscribers?: number;
   created_utc?: number;
   num_crossposts?: number;
   media?: Media | null;
-  is_video?: boolean;
+  is_video: boolean;
   post_hint?: string;
   url_overridden_by_dest?: string;
   preview?: Preview;

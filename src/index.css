@@ -26,10 +26,13 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
+}
+.welcome {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 h1 {
@@ -67,4 +70,22 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+.port {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  grid-auto-rows: 1fr;
+  grid-auto-flow: dense;
+  grid-gap: 0.25em;
+}
+.port a {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+.port img {
+  flex: 1;
+  object-fit: cover;
+  max-width: 100%;
 }

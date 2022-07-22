@@ -46,18 +46,25 @@ function Welcome() {
     pushLocation(`/r/${inputRef.current.value}`);
   };
   return (
-    <>
+    <div className="welcome">
       <img src={reactLogo} className="logo react" alt="React logo" />
       <h1>Reddit Gallery</h1>
       <form onSubmit={onSubmit}>
         <Search name="subreddit" label="/r/" inputRef={inputRef} />
       </form>
-    </>
+    </div>
   );
 }
 
+type PostData = {
+  thumb: string;
+  domain: string;
+  url: string; // TODO: "nsfw", "spoiler"...check if image
+  isVideo: boolean;
+};
+
 function useGalleryFetch(subreddit: string) {
-  const [images, setImages] = useState<Array<string>>([]);
+  const [images, setImages] = useState<Array<PostData>>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   useEffect(() => {
@@ -66,7 +73,16 @@ function useGalleryFetch(subreddit: string) {
       .then((res) => res.json())
       .then((data: Reddit) =>
         setImages(
-          data.data.children.map((e) => e.data.thumbnail).filter((i) => i !== 'self'),
+          data.data.children
+            .map((e) => ({
+              isVideo:
+                ['youtube.com', 'streamable.com'].includes(e.data.domain) ||
+                e.data.is_video,
+              thumb: e.data.thumbnail,
+              domain: e.data.domain,
+              url: e.data.url,
+            }))
+            .filter((i) => !['self', 'default'].includes(i.thumb)),
         ),
       )
       .catch(() => setError(true))
@@ -81,11 +97,16 @@ function Gallery() {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error!</p>;
   return (
-    <ul>
-      {images.map((i) => (
-        <img src={i} />
-      ))}
-    </ul>
+    <>
+      <h2>{location}</h2>
+      <div className="port">
+        {images.map((i) => (
+          <a href={i.url} target="_blank" rel="noreferrer noopener">
+            <img src={(i.url.endsWith('.gif') && i.url) || i.thumb} />
+          </a>
+        ))}
+      </div>
+    </>
   );
 }
 
