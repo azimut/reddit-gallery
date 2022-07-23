@@ -6,6 +6,7 @@ import { Reddit, Child } from '../src/types';
 
 const API_LIMIT = 25;
 const EMBED_PARENT = 'reddit-gallery-phi.vercel.app';
+//const EMBED_PARENT = 'localhost';
 
 function Input({
   name,
@@ -138,7 +139,7 @@ function StreamableEmbed({ id }: { id: string }) {
 function TwitchEmbed({ id }: { id: string }) {
   return (
     <iframe
-      src={`https://clips.twitch.tv/embed?clip=${id}&parent=${EMBED_PARENT}`}
+      src={`https://clips.twitch.tv/embed?clip=${id}&parent=${EMBED_PARENT}&autoplay=true`}
       height={300}
       width={400}
       allowFullScreen
