@@ -251,13 +251,12 @@ function Gallery({ images }: { images: Array<PostData> }) {
       {images.map(
         (image, idx) =>
           (image.embed == '' && image.embed) || (
-            <div className="picture">
+            <div className="picture" key={idx}>
               <img
                 onClick={() => {
                   setOpen(true);
                   setOpened(images[idx]);
                 }}
-                key={idx}
                 alt={image.title}
                 src={(image.url.endsWith('.gif') && image.url) || image.thumb}
               />
