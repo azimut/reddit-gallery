@@ -1,17 +1,29 @@
-- [ ] video.js for v.redd.it hls
-  https://videojs.com/guides/react/
-  https://videojs.com/getting-started
 - [ ] handle "nsfw" on url
 - [ ] handle "spoiler" on url
 - [ ] handle reddit gallery
-- [ ] add subreddit banner (?
-- [ ] embed twitter
 - [ ] infinite/auto scroll
 - [ ] get domain dynamically (? to send it to twitch embed
+- [ ] save recent searched?
+- top menu
+  - [ ] filter by video/image
+  - [ ] add subreddit banner (?
+  - [ ] new/top
+  - [ ] day/week
+  - [ ] enable gifs
+  - [ ] save settings
+- sites
+  - [X] embed twitter
+    - [ ] top margin 0%?
+  - [ ] embed youtube clips
+  - [ ] v.redd.it hls video.js
+    https://videojs.com/guides/react/
+    https://videojs.com/getting-started
+  - [ ] embed redgifs
 - <dialog>
   - [ ] keyboard arrows for next/prev
   - [ ] close on click outside it
     https://www.kindacode.com/article/react-typescript-handling-keyboard-events/
+  - [ ] loading
   - [ ] delete content of on close (avoid player on the background)
   - [X] move with scroll
   - [ ] content @media resize on width (max-width/height)

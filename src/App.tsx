@@ -3,6 +3,7 @@ import reactLogo from './assets/react.svg';
 import './App.css';
 import { ReactNode, RefObject, useEffect, useReducer, useRef, useState } from 'react';
 import { Reddit, Child } from '../src/types';
+import { TwitterTweetEmbed } from 'react-twitter-embed';
 
 const API_LIMIT = 25;
 const EMBED_PARENT = 'reddit-gallery-phi.vercel.app';
@@ -193,6 +194,9 @@ function MainDialog({ post }: { post: PostData }) {
   }
   if (post.domain === 'v.redd.it') {
     return <RedditEmbed url={post.url} />;
+  }
+  if (post.domain === 'twitter.com') {
+    return <TwitterTweetEmbed tweetId={pathname.split('/').reverse()[0]} />;
   }
   return <img src={post.url} alt={post.title} />;
 }
