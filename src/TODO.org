@@ -1,0 +1,6 @@
+- [ ] video.js for v.redd.it hls
+  https://videojs.com/guides/react/
+  https://videojs.com/getting-started
+- [ ] handle "nsfw" on url
+- [ ] handle "spoiler" on url
+- [ ] handle reddit gallery
