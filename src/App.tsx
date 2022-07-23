@@ -62,7 +62,7 @@ function Welcome() {
 type PostData = {
   thumb: string;
   domain: string;
-  url: string; // TODO: "nsfw", "spoiler"...check if image
+  url: string;
   isVideo: boolean;
   permalink: string;
   title: string;
@@ -175,11 +175,12 @@ function RedditEmbed({ url }: { url: string }) {
 
 function MainDialog({ post }: { post: PostData }) {
   const { pathname, searchParams } = new URL(post.url);
+  const slicedPathname = pathname.slice(1);
   if (post.domain === 'clips.twitch.tv') {
-    return <TwitchEmbed id={pathname} />;
+    return <TwitchEmbed id={slicedPathname} />;
   }
   if (post.domain === 'streamable.com') {
-    return <StreamableEmbed id={pathname} />;
+    return <StreamableEmbed id={slicedPathname} />;
   }
   if (post.domain === 'youtube.com') {
     const id = searchParams.get('v');
@@ -187,7 +188,7 @@ function MainDialog({ post }: { post: PostData }) {
     return <YoutubeEmbed id={id} />;
   }
   if (post.domain === 'youtu.be') {
-    return <YoutubeEmbed id={pathname} />;
+    return <YoutubeEmbed id={slicedPathname} />;
   }
   if (post.domain === 'v.redd.it') {
     return <RedditEmbed url={post.url} />;
