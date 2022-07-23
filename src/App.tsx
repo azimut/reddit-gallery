@@ -165,7 +165,8 @@ function MainDialog({ post }: { post: PostData }) {
   return <img src={post.url} alt={post.title} />;
 }
 
-function Dialog({ open, post }: { open: boolean; post: PostData }) {
+function Dialog({ open, post }: { open: boolean; post: PostData | null }) {
+  if (!post) return null;
   return (
     <dialog open={open} className="popup">
       <figure>
@@ -194,16 +195,25 @@ function Anchor({ href, children }: AnchorProps) {
 }
 
 function Gallery({ images }: { images: Array<PostData> }) {
+  const [open, setOpen] = useState(false);
+  const [opened, setOpened] = useState<PostData | null>(null);
   return (
     <main className="port">
-      {images.length > 0 && <Dialog open={true} post={images[0]} />}
-      {images.map((i) => (
-        <Anchor href={i.url}>
-          {(i.embed == '' && i.embed) || (
-            <img alt={i.title} src={(i.url.endsWith('.gif') && i.url) || i.thumb} />
-          )}
-        </Anchor>
-      ))}
+      {images.length > 0 && <Dialog open={open} post={opened} />}
+      {images.map(
+        (image, idx) =>
+          (image.embed == '' && image.embed) || (
+            <img
+              onClick={(e) => {
+                setOpen(true);
+                setOpened(images[idx]);
+              }}
+              key={idx}
+              alt={image.title}
+              src={(image.url.endsWith('.gif') && image.url) || image.thumb}
+            />
+          ),
+      )}
     </main>
   );
 }
