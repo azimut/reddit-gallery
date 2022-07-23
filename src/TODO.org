@@ -4,3 +4,13 @@
 - [ ] handle "nsfw" on url
 - [ ] handle "spoiler" on url
 - [ ] handle reddit gallery
+- [ ] add subreddit banner (?
+- [ ] embed twitter
+- [ ] infinite/auto scroll
+- <dialog>
+  - [ ] keyboard arrows for next/prev
+  - [ ] close on click outside it
+    https://www.kindacode.com/article/react-typescript-handling-keyboard-events/
+  - [ ] delete content of on close (avoid player on the background)
+  - [ ] move with scroll
+  - [ ] content @media resize on width (max-width/height)

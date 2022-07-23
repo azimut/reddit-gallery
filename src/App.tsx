@@ -175,7 +175,7 @@ function RedditEmbed({ url }: { url: string }) {
 
 function MainDialog({ post }: { post: PostData }) {
   const { pathname, searchParams } = new URL(post.url);
-  if (post.domain === 'clips.twitch.com') {
+  if (post.domain === 'clips.twitch.tv') {
     return <TwitchEmbed id={pathname} />;
   }
   if (post.domain === 'streamable.com') {
