@@ -90,6 +90,11 @@ button:focus-visible {
   max-width: 100%;
 }
 
+.popup {
+  position: fixed;
+  top: 10%;
+}
+
 .popup img {
   max-height: 60vh;
   max-width: 90vh;

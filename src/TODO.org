@@ -7,10 +7,11 @@
 - [ ] add subreddit banner (?
 - [ ] embed twitter
 - [ ] infinite/auto scroll
+- [ ] get domain dynamically (? to send it to twitch embed
 - <dialog>
   - [ ] keyboard arrows for next/prev
   - [ ] close on click outside it
     https://www.kindacode.com/article/react-typescript-handling-keyboard-events/
   - [ ] delete content of on close (avoid player on the background)
-  - [ ] move with scroll
+  - [X] move with scroll
   - [ ] content @media resize on width (max-width/height)
