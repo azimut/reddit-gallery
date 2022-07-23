@@ -123,7 +123,7 @@ export interface ChildData {
   subreddit_subscribers?: number;
   created_utc?: number;
   num_crossposts?: number;
-  media?: Media | null;
+  media: Media | null;
   is_video: boolean;
   post_hint?: string;
   url_overridden_by_dest?: string;
@@ -200,6 +200,20 @@ export interface Gildings {
 export interface Media {
   type?: string;
   oembed?: Oembed;
+  reddit_video?: RedditMedia;
+}
+
+export interface RedditMedia {
+  bitrate_kbps: number;
+  fallback_url: string;
+  height: number;
+  width: number;
+  scrubber_media_url: string;
+  dash_url: string;
+  duration: number;
+  hls_url: string;
+  is_gif: boolean;
+  transcoding_status: string;
 }
 
 export interface Oembed {

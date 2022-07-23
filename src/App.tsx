@@ -2,7 +2,7 @@ import { useLocation, Route } from 'wouter';
 import reactLogo from './assets/react.svg';
 import './App.css';
 import { ReactNode, RefObject, useEffect, useReducer, useRef, useState } from 'react';
-import { Reddit } from '../src/types';
+import { Reddit, Child } from '../src/types';
 
 const API_LIMIT = 25;
 const EMBED_PARENT = 'reddit-gallery-phi.vercel.app';
@@ -69,6 +69,18 @@ type PostData = {
   embed: string;
 };
 
+function isVideo(child: Child): boolean {
+  return (
+    [
+      'youtube.com',
+      'clips.twitch.tv',
+      'youtu.be',
+      'v.redd.it',
+      'streamable.com',
+    ].includes(child.data.domain) || child.data.is_video
+  );
+}
+
 function useGalleryFetch(subreddit: string) {
   const [images, setImages] = useState<Array<PostData>>([]);
   const [loading, setLoading] = useState(false);
@@ -88,12 +100,14 @@ function useGalleryFetch(subreddit: string) {
           const next = subreddit.data.children
             .filter((i) => !['self', 'default'].includes(i.data.thumbnail))
             .map((child) => ({
-              isVideo:
-                ['youtube.com', 'streamable.com'].includes(child.data.domain) ||
-                child.data.is_video,
+              isVideo: isVideo(child),
               thumb: child.data.thumbnail,
               domain: child.data.domain,
-              url: child.data.url,
+              url:
+                (child.data.is_video &&
+                  child.data.media?.reddit_video &&
+                  child.data.media.reddit_video.fallback_url) ||
+                child.data.url,
               embed: (child.data.media && child.data.media_embed.content) || '',
               permalink: `https://old.reddit.com${child.data.permalink}`,
               title: child.data.title,
@@ -146,6 +160,19 @@ function YoutubeEmbed({ id }: { id: string }) {
   );
 }
 
+// https://publish.twitter.com/oembed?url = https://twitter.com/Interior/status/463440424141459456
+// https://developer.twitter.com/en/docs/twitter-for-websites/embedded-tweets/overview
+// https://developer.twitter.com/en/docs/twitter-for-websites/oembed-api
+
+function RedditEmbed({ url }: { url: string }) {
+  return (
+    <video width={400} height={300} controls autoPlay>
+      <source src={url} type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+  );
+}
+
 function MainDialog({ post }: { post: PostData }) {
   const { pathname, searchParams } = new URL(post.url);
   if (post.domain === 'clips.twitch.com') {
@@ -162,19 +189,30 @@ function MainDialog({ post }: { post: PostData }) {
   if (post.domain === 'youtu.be') {
     return <YoutubeEmbed id={pathname} />;
   }
+  if (post.domain === 'v.redd.it') {
+    return <RedditEmbed url={post.url} />;
+  }
   return <img src={post.url} alt={post.title} />;
 }
 
-function Dialog({ open, post }: { open: boolean; post: PostData | null }) {
+function Dialog({
+  open,
+  post,
+  onClick,
+}: {
+  open: boolean;
+  post: PostData | null;
+  onClick: () => void;
+}) {
   if (!post) return null;
   return (
-    <dialog open={open} className="popup">
+    <dialog open={open} className="popup" onClick={onClick}>
       <figure>
         <MainDialog post={post} />
         <figcaption>
           {post.title}
-          <Anchor href={post.permalink}>Permalink</Anchor>
-          <Anchor href={post.url}>Link</Anchor>
+          <Anchor href={post.permalink}> Permalink </Anchor>
+          <Anchor href={post.url}> Link </Anchor>
         </figcaption>
       </figure>
     </dialog>
@@ -198,20 +236,30 @@ function Gallery({ images }: { images: Array<PostData> }) {
   const [open, setOpen] = useState(false);
   const [opened, setOpened] = useState<PostData | null>(null);
   return (
-    <main className="port">
-      {images.length > 0 && <Dialog open={open} post={opened} />}
+    <main className="gallery">
+      {images.length > 0 && (
+        <Dialog
+          open={open}
+          post={opened}
+          onClick={() => {
+            setOpen(false);
+          }}
+        />
+      )}
       {images.map(
         (image, idx) =>
           (image.embed == '' && image.embed) || (
-            <img
-              onClick={(e) => {
-                setOpen(true);
-                setOpened(images[idx]);
-              }}
-              key={idx}
-              alt={image.title}
-              src={(image.url.endsWith('.gif') && image.url) || image.thumb}
-            />
+            <div className="picture">
+              <img
+                onClick={() => {
+                  setOpen(true);
+                  setOpened(images[idx]);
+                }}
+                key={idx}
+                alt={image.title}
+                src={(image.url.endsWith('.gif') && image.url) || image.thumb}
+              />
+            </div>
           ),
       )}
     </main>
