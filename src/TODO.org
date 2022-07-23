@@ -1,6 +1,5 @@
-- [ ] handle "nsfw" on url
-- [ ] handle "spoiler" on url
-- [ ] handle reddit gallery
+- [X] handle "nsfw" on url
+- [X] handle "spoiler" on url
 - [ ] infinite/auto scroll
 - [ ] get domain dynamically (? to send it to twitch embed
 - [ ] save recent searched?
@@ -12,8 +11,10 @@
   - [ ] enable gifs
   - [ ] save settings
 - sites
+  - [ ] handle reddit gallery
   - [X] embed twitter
-    - [ ] top margin 0%?
+  - [ ] embed twitter top margin 0%?
+  - [ ] imgur album
   - [ ] embed youtube clips
   - [ ] v.redd.it hls video.js
     https://videojs.com/guides/react/

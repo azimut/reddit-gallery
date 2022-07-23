@@ -100,7 +100,7 @@ function useGalleryFetch(subreddit: string) {
         setAfter(subreddit.data.after || '');
         setImages((prev) => {
           const next = subreddit.data.children
-            .filter((i) => !['self', 'default', ''].includes(i.data.thumbnail))
+            .filter((i) => !i.data.is_self)
             .map((child) => ({
               isVideo: isVideo(child),
               thumb: child.data.thumbnail,
