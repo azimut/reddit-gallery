@@ -89,3 +89,7 @@ button:focus-visible {
   object-fit: cover;
   max-width: 100%;
 }
+
+.popup img {
+  max-height: 60vh;
+}

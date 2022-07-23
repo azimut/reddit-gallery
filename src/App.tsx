@@ -1,8 +1,11 @@
 import { useLocation, Route } from 'wouter';
 import reactLogo from './assets/react.svg';
 import './App.css';
-import { RefObject, useEffect, useReducer, useRef, useState } from 'react';
+import { ReactNode, RefObject, useEffect, useReducer, useRef, useState } from 'react';
 import { Reddit } from '../src/types';
+
+const API_LIMIT = 25;
+const EMBED_PARENT = 'reddit-gallery-phi.vercel.app';
 
 function Input({
   name,
@@ -63,6 +66,7 @@ type PostData = {
   isVideo: boolean;
   permalink: string;
   title: string;
+  embed: string;
 };
 
 function useGalleryFetch(subreddit: string) {
@@ -72,7 +76,6 @@ function useGalleryFetch(subreddit: string) {
   const [count, setCount] = useState(0);
   const [after, setAfter] = useState('');
   const [trigger, dispatch] = useReducer((t) => !t, false);
-  const API_LIMIT = 25;
   useEffect(() => {
     setLoading(true);
     fetch(
@@ -91,6 +94,7 @@ function useGalleryFetch(subreddit: string) {
               thumb: child.data.thumbnail,
               domain: child.data.domain,
               url: child.data.url,
+              embed: (child.data.media && child.data.media_embed.content) || '',
               permalink: `https://old.reddit.com${child.data.permalink}`,
               title: child.data.title,
             }));
@@ -104,13 +108,101 @@ function useGalleryFetch(subreddit: string) {
   return { images, loading, error, dispatch };
 }
 
+// https://support.streamable.com/article/61-advanced-embedding
+function StreamableEmbed({ id }: { id: string }) {
+  return (
+    <iframe
+      src={`https://streamable.com/e/${id}?autoplay=1`}
+      frameBorder={0}
+      height={300}
+      width={400}
+      allowFullScreen={true}
+    ></iframe>
+  );
+}
+// https://dev.twitch.tv/docs/embed/video-and-clips
+function TwitchEmbed({ id }: { id: string }) {
+  return (
+    <iframe
+      src={`https://clips.twitch.tv/embed?clip=${id}&parent=${EMBED_PARENT}`}
+      height={300}
+      width={400}
+      allowFullScreen
+    ></iframe>
+  );
+}
+
+//  https://support.google.com/youtube/answer/171780?hl=en#zippy=%2Cturn-on-privacy-enhanced-mode
+function YoutubeEmbed({ id }: { id: string }) {
+  return (
+    <iframe
+      width={400}
+      height={300}
+      src={`https://www.youtube-nocookie.com/embed/${id}`}
+      frameBorder={0}
+      allow="autoplay; encrypted-media"
+      allowFullScreen
+    ></iframe>
+  );
+}
+
+function MainDialog({ post }: { post: PostData }) {
+  const { pathname, searchParams } = new URL(post.url);
+  if (post.domain === 'clips.twitch.com') {
+    return <TwitchEmbed id={pathname} />;
+  }
+  if (post.domain === 'streamable.com') {
+    return <StreamableEmbed id={pathname} />;
+  }
+  if (post.domain === 'youtube.com') {
+    const id = searchParams.get('v');
+    if (!id) return null;
+    return <YoutubeEmbed id={id} />;
+  }
+  if (post.domain === 'youtu.be') {
+    return <YoutubeEmbed id={pathname} />;
+  }
+  return <img src={post.url} alt={post.title} />;
+}
+
+function Dialog({ open, post }: { open: boolean; post: PostData }) {
+  return (
+    <dialog open={open} className="popup">
+      <figure>
+        <MainDialog post={post} />
+        <figcaption>
+          {post.title}
+          <Anchor href={post.permalink}>Permalink</Anchor>
+          <Anchor href={post.url}>Link</Anchor>
+        </figcaption>
+      </figure>
+    </dialog>
+  );
+}
+
+type AnchorProps = {
+  href: string;
+  children?: ReactNode;
+};
+
+function Anchor({ href, children }: AnchorProps) {
+  return (
+    <a href={href} target="_blank" rel="noreferrer noopener">
+      {children}
+    </a>
+  );
+}
+
 function Gallery({ images }: { images: Array<PostData> }) {
   return (
     <main className="port">
+      {images.length > 0 && <Dialog open={true} post={images[0]} />}
       {images.map((i) => (
-        <a href={i.url} target="_blank" rel="noreferrer noopener">
-          <img src={(i.url.endsWith('.gif') && i.url) || i.thumb} />
-        </a>
+        <Anchor href={i.url}>
+          {(i.embed == '' && i.embed) || (
+            <img alt={i.title} src={(i.url.endsWith('.gif') && i.url) || i.thumb} />
+          )}
+        </Anchor>
       ))}
     </main>
   );

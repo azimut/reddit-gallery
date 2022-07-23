@@ -44,7 +44,7 @@ export interface ChildData {
   subreddit_type?: SubredditType;
   ups?: number;
   total_awards_received?: number;
-  media_embed?: MediaEmbed;
+  media_embed: MediaEmbed;
   thumbnail_width?: number | null;
   author_flair_template_id?: null | string;
   is_original_content?: boolean;
@@ -220,7 +220,7 @@ export interface Oembed {
 }
 
 export interface MediaEmbed {
-  content?: string;
+  content: string;
   width?: number;
   scrolling?: boolean;
   height?: number;
