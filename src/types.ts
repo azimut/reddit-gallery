@@ -107,7 +107,7 @@ export interface ChildData {
   id?: string;
   is_robot_indexable?: boolean;
   report_reasons?: null;
-  author?: string;
+  author: string;
   discussion_type?: null;
   num_comments?: number;
   send_replies?: boolean;
