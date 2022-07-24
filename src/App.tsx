@@ -178,6 +178,19 @@ function RedditEmbed({ embed }: { embed: string }) {
   return <iframe src={embed} width={400} height={550}></iframe>;
 }
 
+function RedGifsEmbed({ id }: { id: string }) {
+  return (
+    <iframe
+      src={`https://redgifs.com/ifr/${id}`}
+      frameBorder="0"
+      scrolling="no"
+      allowFullScreen
+      width="248"
+      height="465"
+    ></iframe>
+  );
+}
+
 function MainDialog({ post }: { post: PostData }) {
   const { pathname, searchParams } = new URL(post.url);
   const slicedPathname = pathname.slice(1);
@@ -201,6 +214,10 @@ function MainDialog({ post }: { post: PostData }) {
   if (post.domain === 'twitter.com') {
     return <RedditEmbed embed={post.embed} />;
   }
+  if (post.domain === 'redgifs.com') {
+    return <RedGifsEmbed id={pathname.split('/').reverse()[0]} />;
+  }
+
   return <img src={post.url} alt={post.title} />;
 }
 

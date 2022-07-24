@@ -11,9 +11,9 @@
   - [ ] enable gifs
   - [ ] save settings
 - sites
-  - [ ] tiktok https://developers.tiktok.com/doc/embed-videos
+  - [ ] tiktok https://developers.tiktok.com/doc/embed-videos https://github.com/justinmahar/react-social-media-embed#tiktok-1
   - [ ] handle reddit gallery
-  - [ ] embed twitter, require() doesn't work on vercel
+  - [X] embed twitter, require() doesn't work on vercel
     https://github.com/saurabhnemade/react-twitter-embed/issues/112
     https://github.com/saurabhnemade/react-twitter-embed/issues/105
   - [ ] embed twitter top margin 0%?
@@ -22,7 +22,7 @@
   - [ ] v.redd.it hls video.js
     https://videojs.com/guides/react/
     https://videojs.com/getting-started
-  - [ ] embed redgifs
+  - [X] embed redgifs
 - <dialog>
   - [ ] keyboard arrows for next/prev
   - [ ] close on click outside it
