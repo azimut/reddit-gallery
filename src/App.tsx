@@ -131,17 +131,18 @@ function StreamableEmbed({ id }: { id: string }) {
       frameBorder={0}
       height={300}
       width={400}
-      allowFullScreen={true}
+      allowFullScreen
     ></iframe>
   );
 }
 // https://dev.twitch.tv/docs/embed/video-and-clips
-function TwitchEmbed({ id }: { id: string }) {
+function TwitchEmbed({ clip }: { clip: string }) {
   return (
     <iframe
-      src={`https://clips.twitch.tv/embed?clip=${id}&parent=${EMBED_PARENT}&autoplay=true`}
+      src={`https://clips.twitch.tv/embed?clip=${clip}&parent=${EMBED_PARENT}&autoplay=true`}
       height={300}
       width={400}
+      frameBorder={0}
       allowFullScreen
     ></iframe>
   );
@@ -195,7 +196,7 @@ function MainDialog({ post }: { post: PostData }) {
   const { pathname, searchParams } = new URL(post.url);
   const slicedPathname = pathname.slice(1);
   if (post.domain === 'clips.twitch.tv') {
-    return <TwitchEmbed id={slicedPathname} />;
+    return <TwitchEmbed clip={slicedPathname} />;
   }
   if (post.domain === 'streamable.com') {
     return <StreamableEmbed id={slicedPathname} />;
