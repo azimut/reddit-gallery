@@ -34,7 +34,7 @@
     https://videojs.com/getting-started
   - [X] embed redgifs
 - <dialog>
-  - [ ] keyboard arrows for next/prev
+  - [X] keyboard arrows for next/prev
     https://www.kindacode.com/article/react-typescript-handling-keyboard-events/
   - [ ] close on click outside it
   - [ ] loading

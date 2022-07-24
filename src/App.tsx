@@ -279,17 +279,32 @@ function Anchor({ href, children }: AnchorProps) {
 function Gallery({ images }: { images: Array<PostData> }) {
   const [open, setOpen] = useState(false);
   const [content, setContent] = useState<PostData | null>(null);
-  useEffect(() => {
-    if (!open) setContent(null);
-  }, [open]);
+  const [idx, setIdx] = useState(0);
   return (
-    <main className="gallery">
+    <main
+      tabIndex={0}
+      className="gallery"
+      onKeyDown={(e) => {
+        if (!open) return;
+        if (e.code === 'ArrowRight') {
+          setIdx((prev) => Math.min(prev + 1, images.length));
+          setContent(images[idx]);
+        }
+        if (e.code === 'ArrowLeft') {
+          setIdx((prev) => Math.max(prev - 1, 0));
+          setContent(images[idx]);
+        }
+      }}
+    >
       {images.length > 0 && (
         <Dialog
           open={open}
           post={content}
           onClick={() => {
-            setOpen(false);
+            {
+              setOpen(false);
+              setContent(null);
+            }
           }}
         />
       )}
@@ -301,6 +316,7 @@ function Gallery({ images }: { images: Array<PostData> }) {
                 onClick={() => {
                   setOpen(true);
                   setContent(images[idx]);
+                  setIdx(idx);
                 }}
                 alt={image.title}
                 src={(image.url.endsWith('.gif') && image.url) || image.thumb}
