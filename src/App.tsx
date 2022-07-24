@@ -61,6 +61,7 @@ function Welcome() {
 }
 
 type PostData = {
+  num_comments: number;
   author: string;
   thumb: string;
   domain: string;
@@ -102,6 +103,7 @@ function useGalleryFetch(subreddit: string) {
           const next = subreddit.data.children
             .filter((i) => !i.data.is_self)
             .map((child) => ({
+              num_comments: child.data.num_comments,
               author: child.data.author,
               isVideo: isVideo(child),
               thumb: child.data.thumbnail,
@@ -241,7 +243,10 @@ function Dialog({
         <figcaption>
           {post.title}
           <br />
-          <Anchor href={post.permalink}> Comments </Anchor> in
+          <Anchor href={post.permalink}>
+            {post.num_comments > 0 ? `${post.num_comments} Comments` : 'No Comments'}
+          </Anchor>{' '}
+          in
           <Anchor href={post.url}> {post.domain} </Anchor> by
           <Anchor href={`https://old.reddit.com/user/${post.author}`}>
             {` /u/${post.author} `}

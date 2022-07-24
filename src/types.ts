@@ -109,7 +109,7 @@ export interface ChildData {
   report_reasons?: null;
   author: string;
   discussion_type?: null;
-  num_comments?: number;
+  num_comments: number;
   send_replies?: boolean;
   whitelist_status?: WhitelistStatus;
   contest_mode?: boolean;
