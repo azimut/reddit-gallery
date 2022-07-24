@@ -35,9 +35,9 @@
   - [X] embed redgifs
 - <dialog>
   - [ ] keyboard arrows for next/prev
-  - [ ] close on click outside it
     https://www.kindacode.com/article/react-typescript-handling-keyboard-events/
+  - [ ] close on click outside it
   - [ ] loading
-  - [ ] delete content of on close (avoid player on the background)
+  - [X] delete content of on close (avoid player on the background)
   - [X] move with scroll
   - [ ] content @media resize on width (max-width/height)

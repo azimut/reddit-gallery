@@ -244,8 +244,8 @@ function Dialog({
           {post.title}
           <br />
           <Anchor href={post.permalink}>
-            {post.num_comments > 0 ? `${post.num_comments} Comments` : 'No Comments'}
-          </Anchor>{' '}
+            {post.num_comments > 0 ? `${post.num_comments} Comments ` : 'No Comments '}
+          </Anchor>
           in
           <Anchor href={post.url}> {post.domain} </Anchor> by
           <Anchor href={`https://old.reddit.com/user/${post.author}`}>
@@ -272,13 +272,16 @@ function Anchor({ href, children }: AnchorProps) {
 
 function Gallery({ images }: { images: Array<PostData> }) {
   const [open, setOpen] = useState(false);
-  const [opened, setOpened] = useState<PostData | null>(null);
+  const [content, setContent] = useState<PostData | null>(null);
+  useEffect(() => {
+    if (!open) setContent(null);
+  }, [open]);
   return (
     <main className="gallery">
       {images.length > 0 && (
         <Dialog
           open={open}
-          post={opened}
+          post={content}
           onClick={() => {
             setOpen(false);
           }}
@@ -291,7 +294,7 @@ function Gallery({ images }: { images: Array<PostData> }) {
               <img
                 onClick={() => {
                   setOpen(true);
-                  setOpened(images[idx]);
+                  setContent(images[idx]);
                 }}
                 alt={image.title}
                 src={(image.url.endsWith('.gif') && image.url) || image.thumb}
