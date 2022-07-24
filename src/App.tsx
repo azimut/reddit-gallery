@@ -237,7 +237,7 @@ function DialogDescription({ post }: { post: PostData }) {
       in
       <Anchor href={post.url}> {post.domain} </Anchor> by
       <Anchor href={`https://old.reddit.com/user/${post.author}`}>
-        {` /u/${post.author} `}
+        {` u/${post.author} `}
       </Anchor>
     </figcaption>
   );
@@ -337,7 +337,7 @@ function SubReddit() {
   return (
     <>
       <header>
-        <h2>{location}</h2>
+        <h2>{location.slice(1)}</h2>
       </header>
       <Gallery images={images} />
       <button onClick={dispatch}>More</button>
