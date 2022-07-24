@@ -180,7 +180,7 @@ function RedditVideoEmbed({ url }: { url: string }) {
 }
 
 function RedditEmbed({ embed }: { embed: string }) {
-  return <iframe src={embed} width={400} height={550}></iframe>;
+  return <iframe src={embed} width={400} height={400}></iframe>;
 }
 
 function RedGifsEmbed({ id }: { id: string }) {
@@ -196,7 +196,7 @@ function RedGifsEmbed({ id }: { id: string }) {
   );
 }
 
-function MainDialog({ post }: { post: PostData }) {
+function DialogMain({ post }: { post: PostData }) {
   const { pathname, searchParams } = new URL(post.url);
   const slicedPathname = pathname.slice(1);
   if (post.domain === 'clips.twitch.tv') {
@@ -226,6 +226,23 @@ function MainDialog({ post }: { post: PostData }) {
   return <img src={post.url} alt={post.title} />;
 }
 
+function DialogDescription({ post }: { post: PostData }) {
+  return (
+    <figcaption>
+      {post.title}
+      <br />
+      <Anchor href={post.permalink}>
+        {post.num_comments > 0 ? `${post.num_comments} Comments ` : 'No Comments '}
+      </Anchor>
+      in
+      <Anchor href={post.url}> {post.domain} </Anchor> by
+      <Anchor href={`https://old.reddit.com/user/${post.author}`}>
+        {` /u/${post.author} `}
+      </Anchor>
+    </figcaption>
+  );
+}
+
 function Dialog({
   open,
   post,
@@ -239,19 +256,8 @@ function Dialog({
   return (
     <dialog open={open} className="popup" onClick={onClick}>
       <figure>
-        <MainDialog post={post} />
-        <figcaption>
-          {post.title}
-          <br />
-          <Anchor href={post.permalink}>
-            {post.num_comments > 0 ? `${post.num_comments} Comments ` : 'No Comments '}
-          </Anchor>
-          in
-          <Anchor href={post.url}> {post.domain} </Anchor> by
-          <Anchor href={`https://old.reddit.com/user/${post.author}`}>
-            {` /u/${post.author} `}
-          </Anchor>
-        </figcaption>
+        <DialogMain post={post} />
+        <DialogDescription post={post} />
       </figure>
     </dialog>
   );
