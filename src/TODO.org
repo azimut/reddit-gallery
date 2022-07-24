@@ -13,7 +13,7 @@
   - [ ] save settings
 - sites
   - [ ] tiktok https://developers.tiktok.com/doc/embed-videos https://github.com/justinmahar/react-social-media-embed#tiktok-1
-  - [ ] handle reddit gallery
+  - [X] handle reddit gallery
     is_gallery
     gallery_data/items/[]/media_id
     i.redd.it/<media_id>.jpg
@@ -36,8 +36,10 @@
 - <dialog>
   - [X] keyboard arrows for next/prev
     https://www.kindacode.com/article/react-typescript-handling-keyboard-events/
+  - [ ] keyboard handle NEXT when MORE and images changed
   - [ ] close on click outside it
   - [ ] loading
+  - [ ] multiple images keyboard
   - [X] delete content of on close (avoid player on the background)
   - [X] move with scroll
   - [ ] content @media resize on width (max-width/height)

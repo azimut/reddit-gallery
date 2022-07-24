@@ -242,12 +242,12 @@ export interface MediaEmbed {
 }
 
 export interface MediaMetadatum {
-  status?: string;
-  e?: string;
-  m?: string;
-  p?: S[];
-  s?: S;
-  id?: string;
+  status: string;
+  e: string;
+  m: string;
+  p: S[];
+  s: S;
+  id: string;
 }
 
 export interface S {

@@ -5,8 +5,8 @@ import { ReactNode, RefObject, useEffect, useReducer, useRef, useState } from 'r
 import { Reddit, Child } from '../src/types';
 
 const API_LIMIT = 25;
-const EMBED_PARENT = 'reddit-gallery-phi.vercel.app';
-//const EMBED_PARENT = 'localhost';
+//const EMBED_PARENT = 'reddit-gallery-phi.vercel.app';
+const EMBED_PARENT = 'localhost';
 
 function Input({
   name,
@@ -108,11 +108,7 @@ function useGalleryFetch(subreddit: string) {
               isVideo: isVideo(child),
               thumb: child.data.thumbnail,
               domain: child.data.domain,
-              url:
-                (child.data.is_video &&
-                  child.data.media?.reddit_video &&
-                  child.data.media.reddit_video.fallback_url) ||
-                child.data.url,
+              url: redditVideo(child) || redditGallery(child)[0] || child.data.url,
               embed: child.data.secure_media_embed?.media_domain_url || '',
               permalink: `https://old.reddit.com${child.data.permalink}`,
               title: child.data.title,
@@ -166,9 +162,19 @@ function YoutubeEmbed({ id }: { id: string }) {
   );
 }
 
-// https://publish.twitter.com/oembed?url = https://twitter.com/Interior/status/463440424141459456
-// https://developer.twitter.com/en/docs/twitter-for-websites/embedded-tweets/overview
-// https://developer.twitter.com/en/docs/twitter-for-websites/oembed-api
+function YoutubeClip() {
+  return (
+    <iframe
+      width="560"
+      height="315"
+      src="https://www.youtube.com/embed/rMSVEeetuMw?clip=UgkxZeMwWxpzCJCaJ9nAaJCUzlCkqnDxxD1J&amp;clipt=EPOqmggYw9CcCA"
+      title="YouTube video player"
+      frameBorder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowFullScreen
+    ></iframe>
+  );
+}
 
 function RedditVideoEmbed({ url }: { url: string }) {
   return (
@@ -224,6 +230,26 @@ function DialogMain({ post }: { post: PostData }) {
   }
 
   return <img src={post.url} alt={post.title} />;
+}
+
+function imageUrl(id: string, meta: string): string {
+  const url = 'https://i.redd.it';
+  if (meta === 'image/png') return `${url}/${id}.png`;
+  if (meta === 'image/jpg') return `${url}/${id}.jpg`;
+  return '';
+}
+
+function redditVideo(child: Child): string | null {
+  if (!child.data.is_video) return null;
+  if (!child.data.media?.reddit_video) return null;
+  return child.data.media.reddit_video.fallback_url;
+}
+
+function redditGallery(child: Child): Array<string> {
+  if (!child.data.is_gallery || !child.data.media_metadata) return [];
+  return Object.entries(child.data.media_metadata)
+    .map(([id, meta]) => imageUrl(id, meta.m))
+    .filter((s) => s !== '');
 }
 
 function DialogDescription({ post }: { post: PostData }) {
