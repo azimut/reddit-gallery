@@ -286,13 +286,15 @@ function Gallery({ images }: { images: Array<PostData> }) {
       className="gallery"
       onKeyDown={(e) => {
         if (!open) return;
-        if (e.code === 'ArrowRight') {
-          setIdx((prev) => Math.min(prev + 1, images.length));
-          setContent(images[idx]);
+        if (e.code === 'ArrowRight' || e.code === 'Period') {
+          const newIdx = Math.min(idx + 1, images.length - 1);
+          setIdx(newIdx);
+          setContent(images[newIdx]);
         }
-        if (e.code === 'ArrowLeft') {
-          setIdx((prev) => Math.max(prev - 1, 0));
-          setContent(images[idx]);
+        if (e.code === 'ArrowLeft' || e.code === 'Comma') {
+          const newIdx = Math.max(idx - 1, 0);
+          setIdx(newIdx);
+          setContent(images[newIdx]);
         }
       }}
     >
