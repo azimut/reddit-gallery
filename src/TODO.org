@@ -3,6 +3,7 @@
 - [ ] infinite/auto scroll
 - [ ] get domain dynamically (? to send it to twitch embed
 - [ ] save recent searched?
+- [X] reddit author link
 - top menu
   - [ ] filter by video/image
   - [ ] add subreddit banner (?
@@ -13,12 +14,21 @@
 - sites
   - [ ] tiktok https://developers.tiktok.com/doc/embed-videos https://github.com/justinmahar/react-social-media-embed#tiktok-1
   - [ ] handle reddit gallery
+    is_gallery
+    gallery_data/items/[]/media_id
+    i.redd.it/<media_id>.jpg
+    media_metadata/[media_id]/id
+    media_metadata/[media_id]/m "image/jpg"
+    media_metadata/[media_id]/e "Image"
   - [X] embed twitter, require() doesn't work on vercel
     https://github.com/saurabhnemade/react-twitter-embed/issues/112
     https://github.com/saurabhnemade/react-twitter-embed/issues/105
   - [ ] embed twitter top margin 0%?
   - [ ] imgur album
+  - [ ] imgur gifv
+  - [ ] imgur links without extension
   - [ ] embed youtube clips
+  - [ ] embed youtube shorts
   - [ ] v.redd.it hls video.js
     https://videojs.com/guides/react/
     https://videojs.com/getting-started

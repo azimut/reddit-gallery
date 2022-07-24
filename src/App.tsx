@@ -61,6 +61,7 @@ function Welcome() {
 }
 
 type PostData = {
+  author: string;
   thumb: string;
   domain: string;
   url: string;
@@ -101,6 +102,7 @@ function useGalleryFetch(subreddit: string) {
           const next = subreddit.data.children
             .filter((i) => !i.data.is_self)
             .map((child) => ({
+              author: child.data.author,
               isVideo: isVideo(child),
               thumb: child.data.thumbnail,
               domain: child.data.domain,
@@ -238,8 +240,12 @@ function Dialog({
         <MainDialog post={post} />
         <figcaption>
           {post.title}
-          <Anchor href={post.permalink}> Permalink </Anchor>
-          <Anchor href={post.url}> Link </Anchor>
+          <br />
+          <Anchor href={post.permalink}> Comments </Anchor> in
+          <Anchor href={post.url}> {post.domain} </Anchor> by
+          <Anchor href={`https://old.reddit.com/user/${post.author}`}>
+            {` /u/${post.author} `}
+          </Anchor>
         </figcaption>
       </figure>
     </dialog>
