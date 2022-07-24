@@ -49,7 +49,7 @@ export interface ChildData {
   author_flair_template_id?: null | string;
   is_original_content?: boolean;
   user_reports?: any[];
-  secure_media?: Media | null;
+  secure_media: Media | null;
   is_reddit_media_domain?: boolean;
   is_meta?: boolean;
   category?: null;

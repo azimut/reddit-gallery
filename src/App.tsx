@@ -3,7 +3,6 @@ import reactLogo from './assets/react.svg';
 import './App.css';
 import { ReactNode, RefObject, useEffect, useReducer, useRef, useState } from 'react';
 import { Reddit, Child } from '../src/types';
-import { TwitterTweetEmbed } from 'react-twitter-embed';
 
 const API_LIMIT = 25;
 const EMBED_PARENT = 'reddit-gallery-phi.vercel.app';
@@ -110,7 +109,7 @@ function useGalleryFetch(subreddit: string) {
                   child.data.media?.reddit_video &&
                   child.data.media.reddit_video.fallback_url) ||
                 child.data.url,
-              embed: (child.data.media && child.data.media_embed.content) || '',
+              embed: child.data.secure_media_embed?.media_domain_url || '',
               permalink: `https://old.reddit.com${child.data.permalink}`,
               title: child.data.title,
             }));
@@ -166,13 +165,17 @@ function YoutubeEmbed({ id }: { id: string }) {
 // https://developer.twitter.com/en/docs/twitter-for-websites/embedded-tweets/overview
 // https://developer.twitter.com/en/docs/twitter-for-websites/oembed-api
 
-function RedditEmbed({ url }: { url: string }) {
+function RedditVideoEmbed({ url }: { url: string }) {
   return (
     <video width={400} height={300} controls autoPlay>
       <source src={url} type="video/mp4" />
       Your browser does not support the video tag.
     </video>
   );
+}
+
+function RedditEmbed({ embed }: { embed: string }) {
+  return <iframe src={embed} width={400} height={550}></iframe>;
 }
 
 function MainDialog({ post }: { post: PostData }) {
@@ -193,10 +196,10 @@ function MainDialog({ post }: { post: PostData }) {
     return <YoutubeEmbed id={slicedPathname} />;
   }
   if (post.domain === 'v.redd.it') {
-    return <RedditEmbed url={post.url} />;
+    return <RedditVideoEmbed url={post.url} />;
   }
   if (post.domain === 'twitter.com') {
-    return <TwitterTweetEmbed tweetId={pathname.split('/').reverse()[0]} />;
+    return <RedditEmbed embed={post.embed} />;
   }
   return <img src={post.url} alt={post.title} />;
 }

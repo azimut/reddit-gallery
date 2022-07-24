@@ -11,8 +11,11 @@
   - [ ] enable gifs
   - [ ] save settings
 - sites
+  - [ ] tiktok https://developers.tiktok.com/doc/embed-videos
   - [ ] handle reddit gallery
-  - [X] embed twitter
+  - [ ] embed twitter, require() doesn't work on vercel
+    https://github.com/saurabhnemade/react-twitter-embed/issues/112
+    https://github.com/saurabhnemade/react-twitter-embed/issues/105
   - [ ] embed twitter top margin 0%?
   - [ ] imgur album
   - [ ] embed youtube clips
