@@ -20,6 +20,27 @@ function Input({
   );
 }
 
+function IFrame({ src, allow }: { src: string; allow?: string }) {
+  return (
+    <iframe
+      src={src}
+      allowFullScreen
+      frameBorder={0}
+      width={400}
+      height={300}
+      allow={allow || ''}
+    ></iframe>
+  );
+}
+
+function Anchor({ href, children }: { href: string; children?: ReactNode }) {
+  return (
+    <a href={href} target="_blank" rel="noreferrer noopener">
+      {children}
+    </a>
+  );
+}
+
 function Label({ name, label }: { name: string; label: string }) {
   return <label htmlFor={name}>{label}</label>;
 }
@@ -130,54 +151,34 @@ function useGalleryFetch(subreddit: string) {
 
 // https://support.streamable.com/article/61-advanced-embedding
 function StreamableEmbed({ id }: { id: string }) {
-  return (
-    <iframe
-      src={`https://streamable.com/e/${id}?autoplay=1`}
-      frameBorder={0}
-      height={300}
-      width={400}
-      allowFullScreen
-    ></iframe>
-  );
+  return <IFrame src={`https://streamable.com/e/${id}?autoplay=1`} />;
 }
+
 // https://dev.twitch.tv/docs/embed/video-and-clips
 function TwitchEmbed({ clip }: { clip: string }) {
   return (
-    <iframe
+    <IFrame
       src={`https://clips.twitch.tv/embed?clip=${clip}&parent=${EMBED_PARENT}&autoplay=true`}
-      height={300}
-      width={400}
-      frameBorder={0}
-      allowFullScreen
-    ></iframe>
+    />
   );
 }
 
 // https://developers.google.com/youtube/player_parameters
 function YoutubeEmbed({ id }: { id: string }) {
   return (
-    <iframe
-      width={400}
-      height={300}
+    <IFrame
       src={`https://www.youtube-nocookie.com/embed/${id}?modestbranding=1&rel=0&iv_load_policy=3&cc_load_policy=1&autoplay=0`}
-      frameBorder={0}
       allow="autoplay; encrypted-media"
-      allowFullScreen
-    ></iframe>
+    />
   );
 }
 
 function YoutubeClip() {
   return (
-    <iframe
-      width="560"
-      height="315"
+    <IFrame
       src="https://www.youtube.com/embed/rMSVEeetuMw?clip=UgkxZeMwWxpzCJCaJ9nAaJCUzlCkqnDxxD1J&amp;clipt=EPOqmggYw9CcCA"
-      title="YouTube video player"
-      frameBorder="0"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowFullScreen
-    ></iframe>
+    />
   );
 }
 
@@ -191,20 +192,11 @@ function RedditVideoEmbed({ url }: { url: string }) {
 }
 
 function RedditEmbed({ embed }: { embed: string }) {
-  return <iframe src={embed} width={400} height={400}></iframe>;
+  return <IFrame src={embed} />;
 }
 
 function RedGifsEmbed({ id }: { id: string }) {
-  return (
-    <iframe
-      src={`https://redgifs.com/ifr/${id}`}
-      frameBorder="0"
-      scrolling="no"
-      allowFullScreen
-      width="248"
-      height="465"
-    ></iframe>
-  );
+  return <IFrame src={`https://redgifs.com/ifr/${id}`} />;
 }
 
 function DialogMain({ post }: { post: PostData }) {
@@ -298,19 +290,6 @@ function Dialog({
         <DialogDescription post={post} />
       </figure>
     </dialog>
-  );
-}
-
-type AnchorProps = {
-  href: string;
-  children?: ReactNode;
-};
-
-function Anchor({ href, children }: AnchorProps) {
-  return (
-    <a href={href} target="_blank" rel="noreferrer noopener">
-      {children}
-    </a>
   );
 }
 
