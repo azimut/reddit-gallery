@@ -1,4 +1,4 @@
-import { useLocation, Route } from 'wouter';
+import { useLocation, Route, Redirect } from 'wouter';
 import redditLogo from './assets/reddit-svgrepo-com.svg';
 import './App.css';
 import { ReactNode, RefObject, useEffect, useReducer, useRef, useState } from 'react';
@@ -387,6 +387,9 @@ function App() {
   return (
     <div className="App">
       <Route path="/" component={Welcome} />
+      <Route path="/r/">
+        <Redirect to="/" />
+      </Route>
       <Route path="/r/:id" component={SubReddit} />
     </div>
   );
