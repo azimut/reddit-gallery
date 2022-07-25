@@ -29,11 +29,6 @@ body {
   min-width: 320px;
   min-height: 100vh;
 }
-.welcome {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
 
 h1 {
   font-size: 3.2em;
@@ -70,6 +65,26 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+.welcome {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  max-height: 100vh;
+}
+
+.welcome main {
+  grid-column: span 3;
+  grid-row: 2 / 3;
+}
+
+.welcome footer {
+  grid-row: 3 / 4;
+  grid-column: span 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
 }
 
 .gallery {

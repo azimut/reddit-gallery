@@ -1,5 +1,5 @@
 import { useLocation, Route } from 'wouter';
-import reactLogo from './assets/react.svg';
+import redditLogo from './assets/reddit-svgrepo-com.svg';
 import './App.css';
 import { ReactNode, RefObject, useEffect, useReducer, useRef, useState } from 'react';
 import { Reddit, Child } from '../src/types';
@@ -50,13 +50,18 @@ function Welcome() {
     pushLocation(`/r/${inputRef.current.value}`);
   };
   return (
-    <main className="welcome">
-      <img src={reactLogo} className="logo react" alt="React logo" />
-      <h1>Reddit Gallery</h1>
-      <form onSubmit={onSubmit}>
-        <Search name="subreddit" label="/r/" inputRef={inputRef} />
-      </form>
-    </main>
+    <div className="welcome">
+      <main>
+        <img src={redditLogo} className="logo react" alt="Reddit logo" />
+        <h1>Reddit Gallery</h1>
+        <form onSubmit={onSubmit}>
+          <Search name="subreddit" label="r/" inputRef={inputRef} />
+        </form>
+      </main>
+      <footer>
+        <Anchor href="https://github.com/azimut/reddit-gallery/">Code</Anchor>
+      </footer>
+    </div>
   );
 }
 
