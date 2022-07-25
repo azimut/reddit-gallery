@@ -110,16 +110,12 @@ button:focus-visible {
   padding-bottom: 0;
   border-width: 0.1em;
   border-radius: 0.375rem;
+  top: 10%;
 }
 
-@media (min-width: 500px) {
-  .popup {
-    top: 10%;
-  }
-  .popup img {
-    max-height: 60vh;
-    max-width: 70vw;
-  }
+.popup img {
+  max-height: 60vh;
+  max-width: 70vw;
 }
 
 @media (min-width: 1200px) {

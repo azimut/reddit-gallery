@@ -1,9 +1,6 @@
-- [X] handle "nsfw" on url
-- [X] handle "spoiler" on url
 - [ ] infinite/auto scroll
 - [ ] get domain dynamically (? to send it to twitch embed
 - [ ] save recent searched?
-- [X] reddit author link
 - [ ] support reddit crossposts
   - [ ] add crosspost_parent_list types
 - top menu
@@ -15,17 +12,6 @@
   - [ ] save settings
 - sites
   - [ ] tiktok https://developers.tiktok.com/doc/embed-videos https://github.com/justinmahar/react-social-media-embed#tiktok-1
-  - [X] handle reddit gallery
-    is_gallery
-    gallery_data/items/[]/media_id
-    i.redd.it/<media_id>.jpg
-    media_metadata/[media_id]/id
-    media_metadata/[media_id]/m "image/jpg"
-    media_metadata/[media_id]/e "Image"
-  - [X] embed twitter, require() doesn't work on vercel
-    https://github.com/saurabhnemade/react-twitter-embed/issues/112
-    https://github.com/saurabhnemade/react-twitter-embed/issues/105
-  - [ ] embed twitter top margin 0%?
   - [ ] imgur album
   - [ ] imgur gifv
   - [ ] imgur links without extension
@@ -34,14 +20,8 @@
   - [ ] v.redd.it hls video.js
     https://videojs.com/guides/react/
     https://videojs.com/getting-started
-  - [X] embed redgifs
 - <dialog>
-  - [X] keyboard arrows for next/prev
-    https://www.kindacode.com/article/react-typescript-handling-keyboard-events/
   - [ ] keyboard handle NEXT when MORE and images changed
   - [ ] close on click outside it
   - [ ] loading
-  - [ ] multiple images keyboard
-  - [X] delete content of on close (avoid player on the background)
-  - [X] move with scroll
-  - [ ] content @media resize on width (max-width/height)
+  - [ ] multiple images keybind
