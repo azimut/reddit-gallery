@@ -5,8 +5,8 @@ import { ReactNode, RefObject, useEffect, useReducer, useRef, useState } from 'r
 import { Reddit, Child } from '../src/types';
 
 const API_LIMIT = 25;
-//const EMBED_PARENT = 'reddit-gallery-phi.vercel.app';
-const EMBED_PARENT = 'localhost';
+const EMBED_PARENT = 'reddit-gallery-phi.vercel.app';
+//const EMBED_PARENT = 'localhost';
 
 function Input({
   name,
@@ -318,12 +318,12 @@ function Gallery({ images }: { images: Array<PostData> }) {
       className="gallery"
       onKeyDown={(e) => {
         if (!open) return;
-        if (e.code === 'ArrowRight' || e.code === 'Period') {
+        if (['ArrowRight', 'Period'].includes(e.code)) {
           const newIdx = Math.min(idx + 1, images.length - 1);
           setIdx(newIdx);
           setContent(images[newIdx]);
         }
-        if (e.code === 'ArrowLeft' || e.code === 'Comma') {
+        if (['ArrowLeft', 'Comma'].includes(e.code)) {
           const newIdx = Math.max(idx - 1, 0);
           setIdx(newIdx);
           setContent(images[newIdx]);
@@ -345,7 +345,7 @@ function Gallery({ images }: { images: Array<PostData> }) {
       {images.map(
         (image, idx) =>
           (image.embed == '' && image.embed) || (
-            <div className="picture" key={idx}>
+            <div className="item" key={idx}>
               <img
                 onClick={() => {
                   setOpen(true);

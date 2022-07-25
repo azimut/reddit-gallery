@@ -79,23 +79,37 @@ button:focus-visible {
   grid-auto-flow: dense;
   grid-gap: 0.5em;
 }
-.picture {
+
+.item {
   display: flex;
   flex-direction: column;
-  margin: 0;
 }
-.picture img {
+
+.item img {
   flex: 1;
   object-fit: cover;
-  max-width: 100%;
 }
 
 .popup {
   position: fixed;
-  top: 10%;
 }
 
-.popup img {
-  max-height: 60vh;
-  max-width: 90vh;
+@media (min-width: 500px) {
+  .popup {
+    top: 10%;
+  }
+  .popup img {
+    max-height: 60vh;
+    max-width: 70vw;
+  }
+}
+
+@media (min-width: 1200px) {
+  .popup {
+    top: 5%;
+  }
+  .popup img {
+    max-height: 70vh;
+    max-width: 100vw;
+  }
 }
