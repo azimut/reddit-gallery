@@ -153,13 +153,13 @@ function TwitchEmbed({ clip }: { clip: string }) {
   );
 }
 
-//  https://support.google.com/youtube/answer/171780?hl=en#zippy=%2Cturn-on-privacy-enhanced-mode
+// https://developers.google.com/youtube/player_parameters
 function YoutubeEmbed({ id }: { id: string }) {
   return (
     <iframe
       width={400}
       height={300}
-      src={`https://www.youtube-nocookie.com/embed/${id}`}
+      src={`https://www.youtube-nocookie.com/embed/${id}?modestbranding=1&rel=0&iv_load_policy=3&cc_load_policy=1&autoplay=0`}
       frameBorder={0}
       allow="autoplay; encrypted-media"
       allowFullScreen
