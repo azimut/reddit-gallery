@@ -11,15 +11,15 @@
   - [ ] enable gifs
   - [ ] save settings
 - sites
-  - [ ] tiktok https://developers.tiktok.com/doc/embed-videos https://github.com/justinmahar/react-social-media-embed#tiktok-1
-  - [ ] imgur album
-  - [ ] imgur gifv
-  - [ ] imgur links without extension
-  - [ ] embed youtube clips
-  - [ ] embed youtube shorts
   - [ ] v.redd.it hls video.js
     https://videojs.com/guides/react/
     https://videojs.com/getting-started
+  - [ ] imgur links without extension
+  - [ ] tiktok https://developers.tiktok.com/doc/embed-videos https://github.com/justinmahar/react-social-media-embed#tiktok-1
+  - [ ] imgur album
+  - [ ] imgur gifv
+  - [ ] embed youtube clips
+  - [ ] embed youtube shorts
 - <dialog>
   - [ ] keyboard handle NEXT when MORE and images changed
   - [ ] close on click outside it
