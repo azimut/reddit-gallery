@@ -4,6 +4,8 @@
 - [ ] get domain dynamically (? to send it to twitch embed
 - [ ] save recent searched?
 - [X] reddit author link
+- [ ] support reddit crossposts
+  - [ ] add crosspost_parent_list types
 - top menu
   - [ ] filter by video/image
   - [ ] add subreddit banner (?

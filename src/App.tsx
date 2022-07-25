@@ -247,6 +247,7 @@ function imageUrl(id: string, meta: string): string {
   const url = 'https://i.redd.it';
   if (meta === 'image/png') return `${url}/${id}.png`;
   if (meta === 'image/jpg') return `${url}/${id}.jpg`;
+  if (meta === 'image/gif') return `${url}/${id}.gif`;
   return '';
 }
 
