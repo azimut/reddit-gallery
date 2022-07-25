@@ -98,6 +98,7 @@ button:focus-visible {
 .item {
   display: flex;
   flex-direction: column;
+  max-height: 250px;
 }
 
 .item img {
@@ -114,7 +115,7 @@ button:focus-visible {
 }
 
 .popup img {
-  max-height: 60vh;
+  max-height: 65vh;
   max-width: 70vw;
 }
 
