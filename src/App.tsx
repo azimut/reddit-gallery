@@ -208,6 +208,12 @@ function DialogMain({ post }: { post: PostData }) {
   if (post.domain === 'clips.twitch.tv') {
     return <TwitchEmbed clip={slicedPathname} />;
   }
+  if (
+    ['www.twitch.tv', 'twitch.tv'].includes(post.domain) &&
+    pathname.split('/')[2] === 'clip'
+  ) {
+    return <TwitchEmbed clip={pathname.split('/')[3]} />;
+  }
   if (post.domain === 'streamable.com') {
     return <StreamableEmbed id={slicedPathname} />;
   }
