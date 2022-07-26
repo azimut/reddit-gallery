@@ -299,54 +299,48 @@ function Dialog({
 function Gallery({ images }: { images: Array<PostData> }) {
   const [open, setOpen] = useState(false);
   const [content, setContent] = useState<PostData | null>(null);
-  const [idx, setIdx] = useState(0);
+  const [idx, setIdx] = useState(-1);
+  const onClick = () => {
+    if (!open) return;
+    setOpen(false);
+    setContent(null);
+  };
+  useEffect(() => {
+    setContent(images[idx]);
+  }, [idx]);
   return (
-    <main
-      tabIndex={0}
-      className="gallery"
-      onKeyDown={(e) => {
-        if (!open) return;
-        if (['ArrowRight', 'Period'].includes(e.code)) {
-          const newIdx = Math.min(idx + 1, images.length - 1);
-          setIdx(newIdx);
-          setContent(images[newIdx]);
-        }
-        if (['ArrowLeft', 'Comma'].includes(e.code)) {
-          const newIdx = Math.max(idx - 1, 0);
-          setIdx(newIdx);
-          setContent(images[newIdx]);
-        }
-      }}
-    >
-      {images.length > 0 && (
-        <Dialog
-          open={open}
-          post={content}
-          onClick={() => {
-            {
-              setOpen(false);
-              setContent(null);
-            }
-          }}
-        />
-      )}
-      {images.map(
-        (image, idx) =>
-          (image.embed == '' && image.embed) || (
-            <div className="item" key={idx}>
-              <img
-                onClick={() => {
-                  setOpen(true);
-                  setContent(images[idx]);
-                  setIdx(idx);
-                }}
-                alt={image.title}
-                src={(image.url.endsWith('.gif') && image.url) || image.thumb}
-              />
-            </div>
-          ),
-      )}
-    </main>
+    <>
+      <main
+        tabIndex={0}
+        className="gallery"
+        onKeyDown={(e) => {
+          if (!open) return;
+          if (['ArrowRight', 'Period'].includes(e.code)) {
+            setIdx((old) => Math.min(old + 1, images.length - 1));
+          }
+          if (['ArrowLeft', 'Comma'].includes(e.code)) {
+            setIdx((old) => Math.max(old - 1, 0));
+          }
+        }}
+      >
+        {images.map(
+          (image, idx) =>
+            (image.embed == '' && image.embed) || (
+              <div className="item" key={idx}>
+                <img
+                  onClick={() => {
+                    setOpen(true);
+                    setIdx(idx);
+                  }}
+                  alt={image.title}
+                  src={(image.url.endsWith('.gif') && image.url) || image.thumb}
+                />
+              </div>
+            ),
+        )}
+      </main>
+      {images.length > 0 && <Dialog open={open} post={content} onClick={onClick} />}
+    </>
   );
 }
 
