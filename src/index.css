@@ -119,9 +119,15 @@ button:focus-visible {
   max-width: 70vw;
 }
 
-.popup iframe {
-  min-height: 50vh;
-  min-width: 80vw;
+.default-iframe {
+  aspect-ratio: 4 / 3;
+  width: 70vw;
+}
+
+.reddit-iframe {
+  width: 70vw;
+  aspect-ratio: 4 / 3.5;
+  max-width: 580px;
 }
 
 @media (min-width: 1200px) {
@@ -132,8 +138,8 @@ button:focus-visible {
     max-height: 77vh;
     max-width: 100vw;
   }
-  .popup iframe {
-    min-height: 75vh;
-    min-width: 60vw;
+  .default-iframe {
+    aspect-ratio: 4 / 3;
+    width: 50vw;
   }
 }

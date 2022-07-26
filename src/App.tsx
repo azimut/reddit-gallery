@@ -20,14 +20,21 @@ function Input({
   );
 }
 
-function IFrame({ src, allow }: { src: string; allow?: string }) {
+function IFrame({
+  src,
+  allow,
+  className,
+}: {
+  src: string;
+  allow?: string;
+  className?: string;
+}) {
   return (
     <iframe
+      className={className || 'default-iframe'}
       src={src}
       allowFullScreen
       frameBorder={0}
-      width={400}
-      height={300}
       allow={allow || ''}
     ></iframe>
   );
@@ -51,7 +58,7 @@ function Search({
   inputRef,
 }: {
   name: string;
-  label: string | undefined;
+  label?: string;
   inputRef: RefObject<HTMLInputElement>;
 }) {
   return (
@@ -191,10 +198,6 @@ function RedditVideoEmbed({ url }: { url: string }) {
   );
 }
 
-function RedditEmbed({ embed }: { embed: string }) {
-  return <IFrame src={embed} />;
-}
-
 function RedGifsEmbed({ id }: { id: string }) {
   return <IFrame src={`https://redgifs.com/ifr/${id}`} />;
 }
@@ -226,7 +229,7 @@ function DialogMain({ post }: { post: PostData }) {
     return <RedditVideoEmbed url={post.url} />;
   }
   if (post.domain === 'twitter.com') {
-    return <RedditEmbed embed={post.embed} />;
+    return <IFrame src={post.embed} className="reddit-iframe" />;
   }
   if (post.domain === 'redgifs.com') {
     return <RedGifsEmbed id={pathname.split('/').reverse()[0]} />;
