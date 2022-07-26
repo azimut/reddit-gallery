@@ -321,11 +321,14 @@ function Gallery({ images }: { images: Array<PostData> }) {
           if (['ArrowLeft', 'Comma'].includes(e.code)) {
             setIdx((old) => Math.max(old - 1, 0));
           }
+          if (['KeyQ'].includes(e.code)) {
+            setOpen(false);
+          }
         }}
       >
         {images.map(
           (image, idx) =>
-            (image.embed == '' && image.embed) || (
+            (image.embed === '' && image.embed) || (
               <div className="item" key={idx}>
                 <img
                   onClick={() => {
