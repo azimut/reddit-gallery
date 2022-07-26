@@ -99,6 +99,7 @@ button:focus-visible {
   display: flex;
   flex-direction: column;
   max-height: 250px;
+  cursor: pointer;
 }
 
 .item img {
