@@ -217,7 +217,7 @@ function DialogMain({ post }: { post: PostData }) {
   if (post.domain === 'streamable.com') {
     return <StreamableEmbed id={slicedPathname} />;
   }
-  if (post.domain === 'youtube.com') {
+  if (['youtube.com', 'www.youtube.com', 'm.youtube.com'].includes(post.domain)) {
     const id = searchParams.get('v');
     if (!id) return null;
     return <YoutubeEmbed id={id} />;

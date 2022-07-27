@@ -3,6 +3,7 @@
 - [ ] save recent searched?
 - [ ] support reddit crossposts
   - [ ] add crosspost_parent_list types
+- Once I get a height I should keep it (?
 - top menu
   - [ ] filter by video/image
   - [ ] add subreddit banner (?
