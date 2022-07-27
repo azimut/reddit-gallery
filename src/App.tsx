@@ -234,8 +234,19 @@ function DialogMain({ post }: { post: PostData }) {
   if (post.domain === 'redgifs.com') {
     return <RedGifsEmbed id={pathname.split('/').reverse()[0]} />;
   }
+  if (
+    post.domain === 'imgur.com' &&
+    slicedPathname.split('/').length === 1 &&
+    !isImage(pathname)
+  ) {
+    return <img src={`${post.url}.jpg`} alt={post.title} />;
+  }
 
   return <img src={post.url} alt={post.title} />;
+}
+
+function isImage(url: string): boolean {
+  return url.includes('.png') || url.includes('.jpg') || url.includes('.jpeg');
 }
 
 function imageUrl(id: string, meta: string): string {
