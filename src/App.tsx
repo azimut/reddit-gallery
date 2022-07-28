@@ -338,13 +338,13 @@ function Gallery({ images }: { images: Array<PostData> }) {
         }}
       >
         {images.map(
-          (image, idx) =>
+          (image, i) =>
             (image.embed === '' && image.embed) || (
-              <div className="item" key={idx}>
+              <div className="item" key={i}>
                 <img
                   onClick={() => {
                     setOpen(true);
-                    setIdx(idx);
+                    setIdx(i);
                   }}
                   alt={image.title}
                   src={(image.url.endsWith('.gif') && image.url) || image.thumb}
