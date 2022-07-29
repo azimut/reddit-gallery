@@ -227,7 +227,6 @@ function DialogMain({ post }: { post: PostData }) {
     pathname.split('/')[1] === 'videos' &&
     searchParams.get('t')
   ) {
-    console.log(pathname);
     const t = searchParams.get('t');
     if (!t) return null;
     return <TwitchEmbed video={pathname.split('/')[2]} time={t} />;
@@ -259,12 +258,14 @@ function DialogMain({ post }: { post: PostData }) {
   ) {
     return <img src={`${post.url}.jpg`} alt={post.title} />;
   }
+  if (isImage(pathname))
+    return <img className="main-thumb" src={post.url} alt={post.title} />;
 
-  return <img src={post.url} alt={post.title} />;
+  return <img className="main-image" src={post.thumb} alt={post.title} />;
 }
 
 function isImage(url: string): boolean {
-  return url.includes('.png') || url.includes('.jpg') || url.includes('.jpeg');
+  return (url.match('.jpg|.png|.jpeg|.gif|.svg|.webp|.tiff|.bmp') && true) || false;
 }
 
 function imageUrl(id: string, meta: string): string {
@@ -334,9 +335,7 @@ function Gallery({ images }: { images: Array<PostData> }) {
   const closeDialog = () => setOpen(false);
   const onClickDialog = closeDialog;
   const onClickImage = (i: number) => setIdx(i);
-  useEffect(() => {
-    setContent(images[idx]);
-  }, [idx]);
+  useEffect(() => setContent(images[idx]), [idx]);
   useEffect(() => {
     !open && setIdx(-1);
   }, [open]);
