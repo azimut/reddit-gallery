@@ -174,7 +174,7 @@ function TwitchEmbed({ video, time }: { video: string; time: string }) {
   return (
     <IFrame
       src={`https://player.twitch.tv/?video=${video}&parent=${EMBED_PARENT}&time=${time}&autoplay=true`}
-    ></IFrame>
+    />
   );
 }
 
@@ -329,29 +329,34 @@ function Gallery({ images }: { images: Array<PostData> }) {
   const [open, setOpen] = useState(false);
   const [content, setContent] = useState<PostData | null>(null);
   const [idx, setIdx] = useState(-1);
-  const onClick = () => {
-    if (!open) return;
-    setOpen(false);
-    setContent(null);
-  };
+  const nextItem = () => setIdx((old) => Math.min(old + 1, images.length - 1));
+  const prevItem = () => setIdx((old) => Math.max(old - 1, 0));
+  const closeDialog = () => setOpen(false);
+  const onClickDialog = closeDialog;
+  const onClickImage = (i: number) => setIdx(i);
   useEffect(() => {
     setContent(images[idx]);
   }, [idx]);
+  useEffect(() => {
+    !open && setIdx(-1);
+  }, [open]);
+  useEffect(() => {
+    content && setOpen(true);
+  }, [content]);
   return (
     <>
       <main
         tabIndex={0}
         className="gallery"
         onKeyDown={(e) => {
-          if (!open) return;
           if (['ArrowRight', 'Period'].includes(e.code)) {
-            setIdx((old) => Math.min(old + 1, images.length - 1));
+            nextItem();
           }
           if (['ArrowLeft', 'Comma'].includes(e.code)) {
-            setIdx((old) => Math.max(old - 1, 0));
+            prevItem();
           }
           if (['KeyQ'].includes(e.code)) {
-            setOpen(false);
+            closeDialog();
           }
         }}
       >
@@ -360,10 +365,7 @@ function Gallery({ images }: { images: Array<PostData> }) {
             (image.embed === '' && image.embed) || (
               <div className="item" key={i}>
                 <img
-                  onClick={() => {
-                    setOpen(true);
-                    setIdx(i);
-                  }}
+                  onClick={() => onClickImage(i)}
                   alt={image.title}
                   src={(image.url.endsWith('.gif') && image.url) || image.thumb}
                 />
@@ -371,7 +373,7 @@ function Gallery({ images }: { images: Array<PostData> }) {
             ),
         )}
       </main>
-      {images.length > 0 && <Dialog open={open} post={content} onClick={onClick} />}
+      {images.length > 0 && <Dialog open={open} post={content} onClick={onClickDialog} />}
     </>
   );
 }
