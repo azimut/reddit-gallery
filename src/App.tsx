@@ -162,11 +162,19 @@ function StreamableEmbed({ id }: { id: string }) {
 }
 
 // https://dev.twitch.tv/docs/embed/video-and-clips
-function TwitchEmbed({ clip }: { clip: string }) {
+function TwitchClipEmbed({ clip }: { clip: string }) {
   return (
     <IFrame
       src={`https://clips.twitch.tv/embed?clip=${clip}&parent=${EMBED_PARENT}&autoplay=true`}
     />
+  );
+}
+
+function TwitchEmbed({ video, time }: { video: string; time: string }) {
+  return (
+    <IFrame
+      src={`https://player.twitch.tv/?video=${video}&parent=${EMBED_PARENT}&time=${time}&autoplay=true`}
+    ></IFrame>
   );
 }
 
@@ -206,13 +214,23 @@ function DialogMain({ post }: { post: PostData }) {
   const { pathname, searchParams } = new URL(post.url);
   const slicedPathname = pathname.slice(1);
   if (post.domain === 'clips.twitch.tv') {
-    return <TwitchEmbed clip={slicedPathname} />;
+    return <TwitchClipEmbed clip={slicedPathname} />;
   }
   if (
     ['www.twitch.tv', 'twitch.tv'].includes(post.domain) &&
     pathname.split('/')[2] === 'clip'
   ) {
-    return <TwitchEmbed clip={pathname.split('/')[3]} />;
+    return <TwitchClipEmbed clip={pathname.split('/')[3]} />;
+  }
+  if (
+    ['www.twitch.tv', 'twitch.tv'].includes(post.domain) &&
+    pathname.split('/')[1] === 'videos' &&
+    searchParams.get('t')
+  ) {
+    console.log(pathname);
+    const t = searchParams.get('t');
+    if (!t) return null;
+    return <TwitchEmbed video={pathname.split('/')[2]} time={t} />;
   }
   if (post.domain === 'streamable.com') {
     return <StreamableEmbed id={slicedPathname} />;
