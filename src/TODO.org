@@ -1,28 +1,33 @@
-- [ ] infinite/auto scroll
-- [ ] get domain dynamically (? to send it to twitch embed
-- [ ] save recent searched?
-- [ ] support reddit crossposts
+- plaintext articles https://github.com/mozilla/readability/
+- add score
+- add relative date https://momentjs.com/
+- infinite/auto scroll
+- get domain dynamically (? to send it to twitch embed
+- save recent searched?
+- support reddit crossposts
   - [ ] add crosspost_parent_list types
 - Once I get a height I should keep it (?
 - top menu
-  - [ ] filter by video/image
-  - [ ] add subreddit banner (?
-  - [ ] new/top
-  - [ ] day/week
-  - [ ] enable gifs
-  - [ ] save settings
+  - filter by video/image
+  - add subreddit banner (?
+  - new/top
+  - day/week
+  - enable gifs
+  - save settings
 - sites
-  - [ ] v.redd.it hls video.js
+  - v.redd.it hls video.js
     https://videojs.com/guides/react/
     https://videojs.com/getting-started
-  - [ ] imgur links without extension
-  - [ ] tiktok https://developers.tiktok.com/doc/embed-videos https://github.com/justinmahar/react-social-media-embed#tiktok-1
-  - [ ] imgur album
-  - [ ] imgur gifv
-  - [ ] embed youtube clips
-  - [ ] embed youtube shorts
+  - imgur links without extension
+  - tiktok https://developers.tiktok.com/doc/embed-videos https://github.com/justinmahar/react-social-media-embed#tiktok-1
+  - imgur album
+    API get images https://apidocs.imgur.com/#7dde894b-a967-4419-9be2-082fbf379109
+    API auth https://apidocs.imgur.com/#authorization-and-oauth
+   - imgur gifv
+  - embed youtube clips
+  - embed youtube shorts
 - <dialog>
-  - [ ] keyboard handle NEXT when MORE and images changed
-  - [ ] close on click outside it
-  - [ ] loading
-  - [ ] multiple images keybind
+  - keyboard handle NEXT when MORE and images changed
+  - close on click outside it
+  - loading
+  - multiple images keybind
