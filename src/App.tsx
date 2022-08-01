@@ -3,10 +3,12 @@ import redditLogo from './assets/reddit-svgrepo-com.svg';
 import './App.css';
 import { ReactNode, RefObject, useEffect, useReducer, useRef, useState } from 'react';
 import { Reddit, Child } from '../src/types';
+import videojs, { VideoJsPlayer } from 'video.js';
+import 'video.js/dist/video-js.css';
 
 const API_LIMIT = 25;
-const EMBED_PARENT = 'reddit-gallery-phi.vercel.app';
-//const EMBED_PARENT = 'localhost';
+//const EMBED_PARENT = 'reddit-gallery-phi.vercel.app';
+const EMBED_PARENT = 'localhost';
 
 function Input({
   name,
@@ -156,6 +158,48 @@ function useGalleryFetch(subreddit: string) {
   return { images, loading, error, dispatch };
 }
 
+function VideoJSEmbed({ url, onReady }: { url: string; onReady: Function }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const playerRef = useRef<VideoJsPlayer | null>(null);
+  const options = {
+    autoplay: true,
+    controls: true,
+    responsive: true,
+    fluid: true,
+    sources: [
+      {
+        src: url,
+        type: 'application/x-mpegURL',
+        /* type: 'application/vnd.apple.mpegURL', */
+      },
+    ],
+  };
+  useEffect(() => {
+    if (!playerRef.current) {
+      const videoElement = videoRef.current;
+      if (!videoElement) return;
+      const player = (playerRef.current = videojs(videoElement, options, () => {
+        videojs.log('player is ready?');
+        onReady(player);
+      }));
+    }
+  }, [videoRef]);
+  useEffect(() => {
+    const player = playerRef.current;
+    return () => {
+      if (player) {
+        player.dispose();
+        playerRef.current = null;
+      }
+    };
+  }, [playerRef]);
+  return (
+    <div data-vjs-player>
+      <video ref={videoRef} className="video-js vjs-big-play-centered" />
+    </div>
+  );
+}
+
 // https://support.streamable.com/article/61-advanced-embedding
 function StreamableEmbed({ id }: { id: string }) {
   return <IFrame src={`https://streamable.com/e/${id}?autoplay=1`} />;
@@ -212,6 +256,10 @@ function RedGifsEmbed({ id }: { id: string }) {
 
 function DialogMain({ post }: { post: PostData }) {
   const { pathname, searchParams } = new URL(post.url);
+  const playerRef = useRef<VideoJsPlayer>();
+  const handlePlayerReady = (player: VideoJsPlayer) => {
+    playerRef.current = player;
+  };
   const slicedPathname = pathname.slice(1);
   if (post.domain === 'clips.twitch.tv') {
     return <TwitchClipEmbed clip={slicedPathname} />;
@@ -243,7 +291,7 @@ function DialogMain({ post }: { post: PostData }) {
     return <YoutubeEmbed id={slicedPathname} />;
   }
   if (post.domain === 'v.redd.it') {
-    return <RedditVideoEmbed url={post.url} />;
+    return <VideoJSEmbed url={post.url} onReady={handlePlayerReady} />;
   }
   if (post.domain === 'twitter.com') {
     return <IFrame src={post.embed} className="reddit-iframe" />;
@@ -258,8 +306,9 @@ function DialogMain({ post }: { post: PostData }) {
   ) {
     return <img src={`${post.url}.jpg`} alt={post.title} />;
   }
-  if (isImage(pathname))
+  if (isImage(pathname)) {
     return <img className="main-thumb" src={post.url} alt={post.title} />;
+  }
 
   return <img className="main-image" src={post.thumb} alt={post.title} />;
 }
@@ -278,8 +327,8 @@ function imageUrl(id: string, meta: string): string {
 
 function redditVideo(child: Child): string | null {
   if (!child.data.is_video) return null;
-  if (!child.data.media?.reddit_video) return null;
-  return child.data.media.reddit_video.fallback_url;
+  if (!child.data.secure_media?.reddit_video) return null;
+  return child.data.secure_media.reddit_video.hls_url;
 }
 
 function redditGallery(child: Child): Array<string> {
