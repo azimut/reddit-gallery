@@ -39,7 +39,7 @@ export interface ChildData {
   name?: string;
   quarantine?: boolean;
   link_flair_text_color?: FlairTextColor;
-  upvote_ratio?: number;
+  upvote_ratio: number;
   author_flair_background_color?: null;
   subreddit_type?: SubredditType;
   ups?: number;
@@ -56,7 +56,7 @@ export interface ChildData {
   secure_media_embed?: MediaEmbed;
   link_flair_text?: null | string;
   can_mod_post?: boolean;
-  score?: number;
+  score: number;
   approved_by?: null;
   is_created_from_ads_ui?: boolean;
   author_premium?: boolean;
@@ -68,7 +68,7 @@ export interface ChildData {
   content_categories?: null;
   is_self?: boolean;
   mod_note?: null;
-  created?: number;
+  created: number;
   link_flair_type?: FlairType;
   wls?: number;
   removed_by_category?: null;
@@ -121,7 +121,7 @@ export interface ChildData {
   stickied?: boolean;
   url: string;
   subreddit_subscribers?: number;
-  created_utc?: number;
+  created_utc: number;
   num_crossposts?: number;
   media: Media | null;
   is_video: boolean;

@@ -3,6 +3,7 @@ import redditLogo from './assets/reddit-svgrepo-com.svg';
 import './App.css';
 import { ReactNode, RefObject, useEffect, useReducer, useRef, useState } from 'react';
 import { Reddit, Child } from '../src/types';
+import moment from 'moment';
 
 const API_LIMIT = 25;
 const EMBED_PARENT = 'reddit-gallery-phi.vercel.app';
@@ -94,6 +95,8 @@ function Welcome() {
 }
 
 type PostData = {
+  created: number;
+  score: number;
   num_comments: number;
   author: string;
   thumb: string;
@@ -136,6 +139,8 @@ function useGalleryFetch(subreddit: string) {
           const next = subreddit.data.children
             .filter((i) => !i.data.is_self)
             .map((child) => ({
+              score: child.data.score,
+              created: child.data.created_utc,
               num_comments: child.data.num_comments,
               author: child.data.author,
               isVideo: isVideo(child),
@@ -290,8 +295,12 @@ function redditGallery(child: Child): Array<string> {
 }
 
 function DialogDescription({ post }: { post: PostData }) {
+  const now = moment(new Date());
+  const end = moment.unix(post.created);
+  const duration = moment.duration(now.diff(end));
   return (
     <figcaption>
+      <small>[{post.score > 0 ? `+${post.score}` : post.score}] </small>
       {post.title}
       <br />
       <Anchor href={post.permalink}>
@@ -300,8 +309,11 @@ function DialogDescription({ post }: { post: PostData }) {
       in
       <Anchor href={post.url}> {post.domain} </Anchor> by
       <Anchor href={`https://old.reddit.com/user/${post.author}`}>
-        {` u/${post.author} `}
+        {` u/${post.author}`}
       </Anchor>
+      <time
+        dateTime={end.format('YYYY-MM-DD HH:mm')}
+      >{` ${duration.humanize()} ago`}</time>
     </figcaption>
   );
 }

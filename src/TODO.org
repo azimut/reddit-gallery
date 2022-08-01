@@ -1,6 +1,4 @@
 - plaintext articles https://github.com/mozilla/readability/
-- add score
-- add relative date https://momentjs.com/
 - infinite/auto scroll
 - get domain dynamically (? to send it to twitch embed
 - save recent searched?
