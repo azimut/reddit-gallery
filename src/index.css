@@ -129,7 +129,7 @@ button:focus-visible {
 
 .default-iframe {
   aspect-ratio: 4 / 3;
-  width: 70vw;
+  width: 95vw;
 }
 
 @media (min-width: 1200px) {
