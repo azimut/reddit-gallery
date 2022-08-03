@@ -135,10 +135,15 @@ button:focus-visible {
 @media (min-width: 1200px) {
   .popup {
     top: 2.5%;
+    max-height: 96%;
     max-width: 1280px;
   }
   .popup img {
-    max-height: 82vh;
+    max-height: 85vh;
+  }
+  .popup figure {
+    padding: 0;
+    margin: 1em 2em 0.5em 2em;
   }
   .default-iframe {
     aspect-ratio: 4 / 3;
