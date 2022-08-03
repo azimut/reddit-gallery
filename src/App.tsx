@@ -366,7 +366,7 @@ function Gallery({ images }: { images: Array<PostData> }) {
           if (['ArrowLeft', 'Comma'].includes(e.code)) {
             prevItem();
           }
-          if (['KeyQ'].includes(e.code)) {
+          if (['KeyQ', 'Escape'].includes(e.code)) {
             closeDialog();
           }
         }}
