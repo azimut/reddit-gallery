@@ -4,6 +4,7 @@ import './App.css';
 import { ReactNode, RefObject, useEffect, useReducer, useRef, useState } from 'react';
 import { Reddit, Child } from '../src/types';
 import moment from 'moment';
+import { decode } from 'html-entities';
 
 const API_LIMIT = 25;
 const EMBED_PARENT = 'reddit-gallery-phi.vercel.app';
@@ -146,10 +147,11 @@ function useGalleryFetch(subreddit: string) {
               isVideo: isVideo(child),
               thumb: child.data.thumbnail,
               domain: child.data.domain,
-              url: redditVideo(child) || redditGallery(child)[0] || child.data.url,
+              url:
+                redditVideo(child) || redditGallery(child)[0] || decode(child.data.url),
               embed: child.data.secure_media_embed?.media_domain_url || '',
               permalink: `https://old.reddit.com${child.data.permalink}`,
-              title: child.data.title,
+              title: decode(child.data.title),
             }));
           return (count === 0 && next) || prev.concat(next);
         });
