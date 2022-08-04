@@ -151,8 +151,8 @@ button:focus-visible {
 
 .reddit-iframe {
   width: 70vw;
-  aspect-ratio: 4 / 4.3;
-  max-width: 580px;
+  aspect-ratio: 4 / 4.1;
+  max-width: 550px;
 }
 
 main:focus-visible {
