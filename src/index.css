@@ -142,12 +142,10 @@ button:focus-visible {
     max-height: 84vh;
   }
   .popup figure {
-    padding: 0;
     margin: 1em 2em 0em 2em;
   }
   .default-iframe {
-    aspect-ratio: 4 / 3;
-    width: 50vw;
+    width: 60vw;
   }
 }
 
