@@ -5,7 +5,12 @@
 - support reddit crossposts
   - [ ] add crosspost_parent_list types
 - Once I get a height I should keep it (?
+- nitter
+  - embed
+  - replace twitte link
+  - find instance?
 - top menu
+  - try to load new ones when clicking on r/subreddit
   - filter by video/image
   - add subreddit banner (?
   - new/top
@@ -21,11 +26,14 @@
   - imgur album
     API get images https://apidocs.imgur.com/#7dde894b-a967-4419-9be2-082fbf379109
     API auth https://apidocs.imgur.com/#authorization-and-oauth
-   - imgur gifv
+    - imgur gifv
   - embed youtube clips
   - embed youtube shorts
 - <dialog>
   - keyboard handle NEXT when MORE and images changed
+  - keyboard NEXT should do MORE if no more images
+  - keyboard focus main on render
+  - keyboard focus main on close dialog
   - close on click outside it
   - loading
   - multiple images keybind

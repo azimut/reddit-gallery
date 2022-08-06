@@ -102,6 +102,8 @@ button:focus-visible {
 }
 
 .item img {
+  overflow: hidden;
+  text-overflow: ellipsis;
   flex: 1;
   object-fit: cover;
 }
@@ -133,6 +135,9 @@ button:focus-visible {
 }
 
 @media (min-width: 1200px) {
+  :root {
+    font-size: 1.25em;
+  }
   .popup {
     top: 0%;
     max-height: 96%;
