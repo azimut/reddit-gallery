@@ -338,13 +338,23 @@ function Dialog({
   );
 }
 
+function useFocus(): RefObject<HTMLElement> {
+  const refToFocus = useRef<HTMLElement>(null);
+  useEffect(() => refToFocus.current?.focus(), [refToFocus]);
+  return refToFocus;
+}
+
 function Gallery({ images }: { images: Array<PostData> }) {
   const [open, setOpen] = useState(false);
   const [content, setContent] = useState<PostData | null>(null);
   const [idx, setIdx] = useState(-1);
+  const ref = useFocus();
   const nextItem = () => setIdx((old) => Math.min(old + 1, images.length - 1));
   const prevItem = () => setIdx((old) => Math.max(old - 1, 0));
-  const closeDialog = () => setOpen(false);
+  const closeDialog = () => {
+    setOpen(false);
+    ref.current?.focus();
+  };
   const onClickDialog = closeDialog;
   const onClickImage = (i: number) => setIdx(i);
   useEffect(() => setContent(images[idx]), [idx]);
@@ -355,37 +365,36 @@ function Gallery({ images }: { images: Array<PostData> }) {
     content && setOpen(true);
   }, [content]);
   return (
-    <>
-      <main
-        tabIndex={0}
-        className="gallery"
-        onKeyDown={(e) => {
-          if (['ArrowRight', 'Period'].includes(e.code)) {
-            nextItem();
-          }
-          if (['ArrowLeft', 'Comma'].includes(e.code)) {
-            prevItem();
-          }
-          if (['KeyQ', 'Escape'].includes(e.code)) {
-            closeDialog();
-          }
-        }}
-      >
-        {images.map(
-          (image, i) =>
-            (image.embed === '' && image.embed) || (
-              <div className="item" key={i}>
-                <img
-                  onClick={() => onClickImage(i)}
-                  alt={image.title}
-                  src={(image.url.endsWith('.gif') && image.url) || image.thumb}
-                />
-              </div>
-            ),
-        )}
-      </main>
+    <main
+      ref={ref}
+      tabIndex={0}
+      className="gallery"
+      onKeyDown={(e) => {
+        if (['ArrowRight', 'Period'].includes(e.code)) {
+          nextItem();
+        }
+        if (['ArrowLeft', 'Comma'].includes(e.code)) {
+          prevItem();
+        }
+        if (['KeyQ', 'Escape'].includes(e.code)) {
+          closeDialog();
+        }
+      }}
+    >
+      {images.map(
+        (image, i) =>
+          (image.embed === '' && image.embed) || (
+            <div className="item" key={i}>
+              <img
+                onClick={() => onClickImage(i)}
+                alt={image.title}
+                src={(image.url.endsWith('.gif') && image.url) || image.thumb}
+              />
+            </div>
+          ),
+      )}
       {images.length > 0 && <Dialog open={open} post={content} onClick={onClickDialog} />}
-    </>
+    </main>
   );
 }
 

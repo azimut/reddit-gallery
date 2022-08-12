@@ -1,3 +1,16 @@
+- add flair
+  - custom from domain
+  - from reddit
+    data.link_flair_text?            = null | "Discussion"
+    data.link_flair_background_color = "#6440a5"
+    data.link_flair_type             = "text"
+    data.link_flair_text_color       = "light" | "dark"
+    data.link_flair_richtext.<0>.a   = ":twitch:"
+    data.link_flair_richtext.<0>.e   = "emoji"
+    data.link_flair_richtext.<0>.u   = "https://emoji.redd"
+    data.link_flair_richtext.<1>.t   = " Hafhor | Just Chatting"
+    data.link_flair_richtext.<1>.e   = "text"
+  - combine flairs, fallback to domain (?
 - plaintext articles https://github.com/mozilla/readability/
 - infinite/auto scroll
 - get domain dynamically (? to send it to twitch embed
@@ -6,6 +19,7 @@
   - [ ] add crosspost_parent_list types
 - Once I get a height I should keep it (?
 - nitter
+  - sometimes data.secure_media is "null"
   - embed
   - replace twitte link
   - find instance?
