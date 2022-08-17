@@ -50,8 +50,8 @@ function Anchor({ href, children }: { href: string; children?: ReactNode }) {
   );
 }
 
-function Label({ name, label }: { name: string; label: string }) {
-  return <label htmlFor={name}>{label}</label>;
+function Label({ name, children }: { name: string; children?: ReactNode }) {
+  return <label htmlFor={name}>{children}</label>;
 }
 
 function Search({
@@ -60,12 +60,12 @@ function Search({
   inputRef,
 }: {
   name: string;
-  label?: string;
+  label: string;
   inputRef: RefObject<HTMLInputElement>;
 }) {
   return (
     <>
-      <Label name={name} label={label || ''} />
+      <Label name={name}>{label}</Label>
       <Input name={name} inputRef={inputRef} />
     </>
   );
