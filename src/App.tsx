@@ -218,6 +218,7 @@ function RedGifsEmbed({ id }: { id: string }) {
 }
 
 function DialogMain({ post }: { post: PostData }) {
+  if (post.url === '') return null;
   const { pathname, searchParams } = new URL(post.url);
   const slicedPathname = pathname.slice(1);
   if (post.domain === 'clips.twitch.tv') {
@@ -265,10 +266,13 @@ function DialogMain({ post }: { post: PostData }) {
   ) {
     return <img src={`${post.url}.jpg`} alt={post.title} />;
   }
-  if (isImage(pathname))
-    return <img className="main-thumb" src={post.url} alt={post.title} />;
 
-  return <img className="main-image" src={post.thumb} alt={post.title} />;
+  if (isImage(pathname)) return <img src={post.url} alt={post.title} />;
+
+  if (isImage(post.thumb))
+    return <img className="main-thumb" src={post.thumb} alt={post.title} />;
+
+  return null;
 }
 
 function isImage(url: string): boolean {
