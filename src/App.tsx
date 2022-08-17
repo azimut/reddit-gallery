@@ -206,7 +206,7 @@ function YoutubeClip() {
 
 function RedditVideoEmbed({ url }: { url: string }) {
   return (
-    <video width={400} height={300} controls autoPlay>
+    <video controls autoPlay>
       <source src={url} type="video/mp4" />
       Your browser does not support the video tag.
     </video>
@@ -302,9 +302,6 @@ function DialogDescription({ post }: { post: PostData }) {
   const duration = formatDistance(end, now, { addSuffix: true });
   return (
     <figcaption>
-      <small>[{post.score > 0 ? `+${post.score}` : post.score}] </small>
-      {post.title}
-      <br />
       <Anchor href={post.permalink}>
         {post.num_comments > 0 ? `${post.num_comments} Comments ` : 'No Comments '}
       </Anchor>
@@ -330,6 +327,8 @@ function Dialog({
   if (!post) return null;
   return (
     <dialog open={open} className="popup" onClick={onClick}>
+      <small>[{post.score > 0 ? `+${post.score}` : post.score}] </small>
+      {post.title}
       <figure>
         <DialogMain post={post} />
         <DialogDescription post={post} />
