@@ -344,13 +344,28 @@ function useFocus(): RefObject<HTMLElement> {
   return refToFocus;
 }
 
-function Gallery({ images }: { images: Array<PostData> }) {
+function Gallery({ images, nextPage }: { images: Array<PostData>; nextPage: Function }) {
   const [open, setOpen] = useState(false);
   const [content, setContent] = useState<PostData | null>(null);
   const [idx, setIdx] = useState(-1);
   const ref = useFocus();
-  const nextItem = () => setIdx((old) => Math.min(old + 1, images.length - 1));
-  const prevItem = () => setIdx((old) => Math.max(old - 1, 0));
+  const nextItem = () => {
+    setIdx((old) => {
+      if (old > Math.max(0, images.length - 5) && old <= Math.max(0, images.length)) {
+        nextPage();
+      }
+      return Math.min(old + 1, images.length - 1);
+    });
+  };
+  const prevItem = () => {
+    setIdx((old) => {
+      if (old === 0) {
+        closeDialog();
+        return -1;
+      }
+      return Math.max(0, old - 1);
+    });
+  };
   const closeDialog = () => {
     setOpen(false);
     ref.current?.focus();
@@ -407,7 +422,7 @@ function SubReddit() {
       <header>
         <h2>{location.slice(1)}</h2>
       </header>
-      <Gallery images={images} />
+      <Gallery images={images} nextPage={dispatch} />
       <button onClick={dispatch}>More</button>
     </>
   );
