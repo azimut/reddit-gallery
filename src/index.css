@@ -167,12 +167,12 @@ button:focus-visible {
   }
 }
 
-video {
+.popup video {
   max-height: 65vh;
   max-width: 100%;
 }
 @media (min-width: 1200px) {
-  video {
+  .popup video {
     max-height: 84vh;
   }
 }
@@ -181,6 +181,17 @@ video {
   width: 70vw;
   aspect-ratio: 4 / 4.1;
   max-width: 550px;
+}
+
+.nitter-iframe {
+  width: 90vw;
+  max-width: 500px;
+  aspect-ratio: 4 / 3.7;
+}
+@media (orientation: portrait) {
+  .nitter-iframe {
+    aspect-ratio: 4 / 4.8;
+  }
 }
 
 main:focus-visible {

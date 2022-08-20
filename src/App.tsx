@@ -6,6 +6,7 @@ import { Reddit, Child } from '../src/types';
 import { decode } from 'html-entities';
 import { format, formatDistance, fromUnixTime } from 'date-fns';
 
+const NITTER_DOMAIN = 'nitter.ca';
 const API_LIMIT = 25;
 const EMBED_PARENT = 'reddit-gallery-phi.vercel.app';
 //const EMBED_PARENT = 'localhost';
@@ -254,7 +255,16 @@ function DialogMain({ post }: { post: PostData }) {
     return <RedditVideoEmbed url={post.url} />;
   }
   if (post.domain === 'twitter.com') {
-    return <IFrame src={post.embed} className="reddit-iframe" />;
+    if (post.embed.length > 0) {
+      return <IFrame src={post.embed} className="reddit-iframe" />;
+    } else {
+      return (
+        <IFrame
+          src={`https://${NITTER_DOMAIN}${pathname}/embed`}
+          className="nitter-iframe"
+        />
+      );
+    }
   }
   if (post.domain === 'redgifs.com') {
     return <RedGifsEmbed id={pathname.split('/').reverse()[0]} />;
