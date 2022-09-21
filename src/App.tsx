@@ -255,8 +255,14 @@ function DialogMain({ post }: { post: PostData }) {
   if (['youtube.com', 'www.youtube.com', 'm.youtube.com'].includes(post.domain)) {
     const v = searchParams.get('v');
     const t = searchParams.get('t');
-    if (!v) return null;
-    return <YoutubeEmbed id={v} start={t} />;
+    if (v) return <YoutubeEmbed id={v} start={t} />;
+    if (pathname.includes('/shorts/'))
+      return (
+        <img
+          src={`https://i.ytimg.com/vi/${pathname.split('/')[2]}/hqdefault.jpg`}
+          alt={post.title}
+        />
+      );
   }
   if (post.domain === 'youtu.be') {
     const t = searchParams.get('t');
