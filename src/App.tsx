@@ -187,13 +187,22 @@ function TwitchEmbed({ video, time }: { video: string; time: string }) {
 }
 
 // https://developers.google.com/youtube/player_parameters
-function YoutubeEmbed({ id }: { id: string }) {
-  return (
-    <IFrame
-      src={`https://www.youtube-nocookie.com/embed/${id}?modestbranding=1&rel=0&iv_load_policy=3&cc_load_policy=1&autoplay=0`}
-      allow="autoplay; encrypted-media"
-    />
-  );
+function YoutubeEmbed({ id, start }: { id: string; start: string | null }) {
+  if (start) {
+    return (
+      <IFrame
+        src={`https://www.youtube-nocookie.com/embed/${id}?modestbranding=1&rel=0&iv_load_policy=3&cc_load_policy=1&autoplay=0&start=${start}`}
+        allow="autoplay; encrypted-media"
+      />
+    );
+  } else {
+    return (
+      <IFrame
+        src={`https://www.youtube-nocookie.com/embed/${id}?modestbranding=1&rel=0&iv_load_policy=3&cc_load_policy=1&autoplay=0`}
+        allow="autoplay; encrypted-media"
+      />
+    );
+  }
 }
 
 function YoutubeClip() {
@@ -244,12 +253,14 @@ function DialogMain({ post }: { post: PostData }) {
     return <StreamableEmbed id={slicedPathname} />;
   }
   if (['youtube.com', 'www.youtube.com', 'm.youtube.com'].includes(post.domain)) {
-    const id = searchParams.get('v');
-    if (!id) return null;
-    return <YoutubeEmbed id={id} />;
+    const v = searchParams.get('v');
+    const t = searchParams.get('t');
+    if (!v) return null;
+    return <YoutubeEmbed id={v} start={t} />;
   }
   if (post.domain === 'youtu.be') {
-    return <YoutubeEmbed id={slicedPathname} />;
+    const t = searchParams.get('t');
+    return <YoutubeEmbed id={slicedPathname} start={t} />;
   }
   if (post.domain === 'v.redd.it') {
     return <RedditVideoEmbed url={post.url} />;
