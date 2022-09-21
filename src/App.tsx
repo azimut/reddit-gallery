@@ -294,6 +294,11 @@ function DialogMain({ post }: { post: PostData }) {
     return <img src={`${post.url}.jpg`} alt={post.title} />;
   }
 
+  if (post.domain === 'imgflip.com' && !isImage(pathname))
+    return (
+      <img src={`https://i.imgflip.com/${pathname.slice(3)}.jpg`} alt={post.title} />
+    );
+
   if (isImage(pathname)) return <img src={post.url} alt={post.title} />;
 
   if (isImage(post.thumb))
