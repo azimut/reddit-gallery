@@ -265,7 +265,7 @@ function DialogMain({ post }: { post: PostData }) {
   if (post.domain === 'v.redd.it') {
     return <RedditVideoEmbed url={post.url} />;
   }
-  if (post.domain === 'twitter.com') {
+  if (['twitter.com', 'm.twitter.com'].includes(post.domain)) {
     if (post.embed.length > 0) {
       return <IFrame src={post.embed} className="reddit-iframe" />;
     } else {
