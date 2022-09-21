@@ -1,3 +1,5 @@
+- support /comments/ URL for nicer (!? view
+  https://old.reddit.com/r/LivestreamFail/comments/x00hsz/twitch_partner_jinnytty_jinnytty1_has_been_banned/
 - add flair
   - custom from domain
   - from reddit
@@ -27,6 +29,9 @@
   - enable gifs
   - save settings
 - sites
+  - imgflip
+    url https://imgflip.com/i/6rf0hv
+    img https://i.imgflip.com/6rf0hv.jpg
   - v.redd.it hls video.js
     https://videojs.com/guides/react/
     https://videojs.com/getting-started
@@ -36,8 +41,15 @@
     API get images https://apidocs.imgur.com/#7dde894b-a967-4419-9be2-082fbf379109
     API auth https://apidocs.imgur.com/#authorization-and-oauth
     - imgur gifv
-  - embed youtube clips
-  - embed youtube shorts
+  - youtube: support t= https://www.youtube.com/watch?v=ZeRP3RuWvcw&t=7741s https://youtu.be/g8GhyPfXOGQ?t=8h12m18s
+  - youtube: embed clips https://www.youtube.com/clip/UgkxA9ruwzY7X-9g3YCryB4-cW_wxPaUtiHc
+  - youtube: embed shorts https://www.youtube.com/shorts/qlbt-oDcg-s
+  - youtube: while clips and short are not supported add an image thumbnail (?
+    - only works with shorts ids
+    - https://i.ytimg.com/vi/6vNAsLJSOrY/hqdefault.jpg
+  - twitter quote tweets to nitter
+    https://twitter.com/PILL0WPET/status/1570439097755508740/retweets/with_comments
+- swipe
 - <dialog>
   - keyboard handle NEXT when MORE and images changed
   - keyboard NEXT should do MORE if no more images
