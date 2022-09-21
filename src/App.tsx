@@ -246,8 +246,7 @@ function DialogMain({ post }: { post: PostData }) {
     searchParams.get('t')
   ) {
     const t = searchParams.get('t');
-    if (!t) return null;
-    return <TwitchEmbed video={pathname.split('/')[2]} time={t} />;
+    if (t) return <TwitchEmbed video={pathname.split('/')[2]} time={t} />;
   }
   if (post.domain === 'streamable.com') {
     return <StreamableEmbed id={slicedPathname} />;
