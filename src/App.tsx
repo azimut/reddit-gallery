@@ -1,27 +1,17 @@
 import { useLocation, Route, Redirect } from 'wouter';
-import redditLogo from './assets/reddit-svgrepo-com.svg';
 import './App.css';
-import { ReactNode, RefObject, useEffect, useReducer, useRef, useState } from 'react';
+import { RefObject, useEffect, useReducer, useRef, useState } from 'react';
 import { Reddit, Child } from '../src/types';
 import { decode } from 'html-entities';
 import { format, formatDistance, fromUnixTime } from 'date-fns';
+
+import Anchor from './components/atoms/Anchor';
+import Welcome from './components/pages/Welcome';
 
 const NITTER_DOMAIN = 'nitter.ca';
 const API_LIMIT = 25;
 const EMBED_PARENT = 'reddit-gallery-phi.vercel.app';
 //const EMBED_PARENT = 'localhost';
-
-function Input({
-  name,
-  inputRef,
-}: {
-  name: string;
-  inputRef: RefObject<HTMLInputElement>;
-}) {
-  return (
-    <input ref={inputRef} type="text" name={name} placeholder={name} required autoFocus />
-  );
-}
 
 function IFrame({
   src,
@@ -40,59 +30,6 @@ function IFrame({
       frameBorder={0}
       allow={allow || ''}
     ></iframe>
-  );
-}
-
-function Anchor({ href, children }: { href: string; children?: ReactNode }) {
-  return (
-    <a href={href} target="_blank" rel="noreferrer noopener">
-      {children}
-    </a>
-  );
-}
-
-function Label({ name, children }: { name: string; children?: ReactNode }) {
-  return <label htmlFor={name}>{children}</label>;
-}
-
-function Search({
-  name,
-  label,
-  inputRef,
-}: {
-  name: string;
-  label: string;
-  inputRef: RefObject<HTMLInputElement>;
-}) {
-  return (
-    <>
-      <Label name={name}>{label}</Label>
-      <Input name={name} inputRef={inputRef} />
-    </>
-  );
-}
-
-function Welcome() {
-  const [_, pushLocation] = useLocation();
-  const inputRef = useRef<HTMLInputElement>(null);
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!inputRef.current) return;
-    pushLocation(`/r/${inputRef.current.value}`);
-  };
-  return (
-    <div className="welcome">
-      <main>
-        <img src={redditLogo} className="logo react" alt="Reddit logo" />
-        <h1>Reddit Gallery</h1>
-        <form onSubmit={onSubmit}>
-          <Search name="subreddit" label="r/" inputRef={inputRef} />
-        </form>
-      </main>
-      <footer>
-        <Anchor href="https://github.com/azimut/reddit-gallery/">Code</Anchor>
-      </footer>
-    </div>
   );
 }
 
