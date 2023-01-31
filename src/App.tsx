@@ -8,7 +8,7 @@ import { format, formatDistance, fromUnixTime } from 'date-fns';
 import Anchor from './components/atoms/Anchor';
 import Welcome from './components/pages/Welcome';
 
-const NITTER_DOMAIN = 'nitter.ca';
+const NITTER_DOMAIN = 'nitter.ir';
 const API_LIMIT = 25;
 const EMBED_PARENT = 'reddit-gallery-phi.vercel.app';
 //const EMBED_PARENT = 'localhost';
