@@ -210,6 +210,9 @@ function DialogMain({ post }: { post: PostData }) {
   if (['twitter.com', 'm.twitter.com'].includes(post.domain)) {
     if (post.embed.length > 0) {
       return <IFrame src={post.embed} className="reddit-iframe" />;
+    } else if (pathname.match('^/\\w+[/]?$')) {
+      // is twitter username link
+      return null;
     } else {
       return (
         <IFrame
