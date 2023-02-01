@@ -6,6 +6,7 @@ import { decode } from 'html-entities';
 import { format, formatDistance, fromUnixTime } from 'date-fns';
 
 import Anchor from './components/atoms/Anchor';
+import Video from './components/atoms/Video';
 import Welcome from './components/pages/Welcome';
 
 const NITTER_DOMAIN = 'nitter.ir';
@@ -151,15 +152,6 @@ function YoutubeClip() {
   );
 }
 
-function RedditVideoEmbed({ url }: { url: string }) {
-  return (
-    <video controls autoPlay>
-      <source src={url} type="video/mp4" />
-      Your browser does not support the video tag.
-    </video>
-  );
-}
-
 function RedGifsEmbed({ id }: { id: string }) {
   return <IFrame src={`https://redgifs.com/ifr/${id}`} />;
 }
@@ -205,7 +197,7 @@ function DialogMain({ post }: { post: PostData }) {
     return <YoutubeEmbed id={slicedPathname} start={t} />;
   }
   if (post.domain === 'v.redd.it') {
-    return <RedditVideoEmbed url={post.url} />;
+    return <Video url={post.url} />;
   }
   if (['twitter.com', 'm.twitter.com'].includes(post.domain)) {
     if (post.embed.length > 0) {
@@ -234,6 +226,9 @@ function DialogMain({ post }: { post: PostData }) {
     !isImage(pathname)
   ) {
     return <img src={`${post.url}.jpg`} alt={post.title} />;
+  }
+  if (post.domain === 'i.imgur.com' && pathname.endsWith('.gifv')) {
+    return <Video url={post.url.replace(/\.gifv/, '.mp4')} />;
   }
 
   if (post.domain === 'imgflip.com' && !isImage(pathname))
