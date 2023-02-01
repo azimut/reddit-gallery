@@ -42,23 +42,10 @@ type PostData = {
   thumb: string;
   domain: string;
   url: string;
-  isVideo: boolean;
   permalink: string;
   title: string;
   embed: string;
 };
-
-function isVideo(child: Child): boolean {
-  return (
-    [
-      'youtube.com',
-      'clips.twitch.tv',
-      'youtu.be',
-      'v.redd.it',
-      'streamable.com',
-    ].includes(child.data.domain) || child.data.is_video
-  );
-}
 
 function useGalleryFetch(subreddit: string) {
   const [images, setImages] = useState<Array<PostData>>([]);
@@ -83,7 +70,6 @@ function useGalleryFetch(subreddit: string) {
               created: child.data.created_utc,
               num_comments: child.data.num_comments,
               author: child.data.author,
-              isVideo: isVideo(child),
               thumb: child.data.thumbnail,
               domain: child.data.domain,
               url:
