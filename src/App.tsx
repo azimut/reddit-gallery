@@ -216,7 +216,10 @@ function DialogMain({ post }: { post: PostData }) {
     } else {
       return (
         <IFrame
-          src={`https://${NITTER_DOMAIN}${pathname.replace(/photo\/[0-9]+$/, '')}/embed`}
+          src={`https://${NITTER_DOMAIN}${pathname.replace(
+            /\/photo\/[0-9]+$/,
+            '',
+          )}/embed`}
           className="nitter-iframe"
         />
       );
