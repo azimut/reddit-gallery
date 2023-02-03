@@ -47,6 +47,16 @@ type PostData = {
   embed: string;
 };
 
+function isUrl(raw_url: string) {
+  let url: URL;
+  try {
+    url = new URL(raw_url);
+  } catch (_) {
+    return false;
+  }
+  return url.protocol === 'http:' || url.protocol === 'https:';
+}
+
 function useGalleryFetch(subreddit: string) {
   const [images, setImages] = useState<Array<PostData>>([]);
   const [loading, setLoading] = useState(false);
@@ -70,7 +80,8 @@ function useGalleryFetch(subreddit: string) {
               created: child.data.created_utc,
               num_comments: child.data.num_comments,
               author: child.data.author,
-              thumb: child.data.thumbnail,
+              thumb:
+                (isUrl(child.data.thumbnail) && child.data.thumbnail) || child.data.url,
               domain: child.data.domain,
               url:
                 redditVideo(child) || redditGallery(child)[0] || decode(child.data.url),
