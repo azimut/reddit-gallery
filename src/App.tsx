@@ -5,34 +5,19 @@ import { Reddit, Child } from '../src/types';
 import { decode } from 'html-entities';
 import { format, formatDistance, fromUnixTime } from 'date-fns';
 
+import { API_LIMIT, NITTER_DOMAIN } from './constants';
+
+import YoutubeEmbed from './components/molecules/YoutubeEmbed';
+import TwitchEmbed from './components/molecules/TwitchEmbed';
+import TwitchClipEmbed from './components/molecules/TwitchClipEmbed';
+import StreamableEmbed from './components/molecules/StreamableEmbed';
+import RedGifsEmbed from './components/molecules/RedGifsEmbed';
+
+import IFrame from './components/atoms/IFrame';
 import Anchor from './components/atoms/Anchor';
 import Video from './components/atoms/Video';
 import Welcome from './components/pages/Welcome';
-
-const NITTER_DOMAIN = 'nitter.ir';
-const API_LIMIT = 25;
-const EMBED_PARENT = 'reddit-gallery-phi.vercel.app';
-//const EMBED_PARENT = 'localhost';
-
-function IFrame({
-  src,
-  allow,
-  className,
-}: {
-  src: string;
-  allow?: string;
-  className?: string;
-}) {
-  return (
-    <iframe
-      className={className || 'default-iframe'}
-      src={src}
-      allowFullScreen
-      frameBorder={0}
-      allow={allow || ''}
-    ></iframe>
-  );
-}
+import { isUrl, isImage } from './helpers/validators';
 
 type PostData = {
   created: number;
@@ -46,16 +31,6 @@ type PostData = {
   title: string;
   embed: string;
 };
-
-function isUrl(raw_url: string) {
-  let url: URL;
-  try {
-    url = new URL(raw_url);
-  } catch (_) {
-    return false;
-  }
-  return url.protocol === 'http:' || url.protocol === 'https:';
-}
 
 function useGalleryFetch(subreddit: string) {
   const [images, setImages] = useState<Array<PostData>>([]);
@@ -81,7 +56,8 @@ function useGalleryFetch(subreddit: string) {
               num_comments: child.data.num_comments,
               author: child.data.author,
               thumb:
-                (isUrl(child.data.thumbnail) && child.data.thumbnail) || child.data.url,
+                (isUrl(child.data.thumbnail) && child.data.thumbnail) ||
+                decode(child.data.url),
               domain: child.data.domain,
               url:
                 redditVideo(child) || redditGallery(child)[0] || decode(child.data.url),
@@ -97,60 +73,6 @@ function useGalleryFetch(subreddit: string) {
       .finally(() => setLoading(false));
   }, [trigger]);
   return { images, loading, error, dispatch };
-}
-
-// https://support.streamable.com/article/61-advanced-embedding
-function StreamableEmbed({ id }: { id: string }) {
-  return <IFrame src={`https://streamable.com/e/${id}?autoplay=1`} />;
-}
-
-// https://dev.twitch.tv/docs/embed/video-and-clips
-function TwitchClipEmbed({ clip }: { clip: string }) {
-  return (
-    <IFrame
-      src={`https://clips.twitch.tv/embed?clip=${clip}&parent=${EMBED_PARENT}&autoplay=true`}
-    />
-  );
-}
-
-function TwitchEmbed({ video, time }: { video: string; time: string }) {
-  return (
-    <IFrame
-      src={`https://player.twitch.tv/?video=${video}&parent=${EMBED_PARENT}&time=${time}&autoplay=true`}
-    />
-  );
-}
-
-// https://developers.google.com/youtube/player_parameters
-function YoutubeEmbed({ id, start }: { id: string; start: string | null }) {
-  if (start) {
-    return (
-      <IFrame
-        src={`https://www.youtube-nocookie.com/embed/${id}?modestbranding=1&rel=0&iv_load_policy=3&cc_load_policy=1&autoplay=0&start=${start}`}
-        allow="autoplay; encrypted-media"
-      />
-    );
-  } else {
-    return (
-      <IFrame
-        src={`https://www.youtube-nocookie.com/embed/${id}?modestbranding=1&rel=0&iv_load_policy=3&cc_load_policy=1&autoplay=0`}
-        allow="autoplay; encrypted-media"
-      />
-    );
-  }
-}
-
-function YoutubeClip() {
-  return (
-    <IFrame
-      src="https://www.youtube.com/embed/rMSVEeetuMw?clip=UgkxZeMwWxpzCJCaJ9nAaJCUzlCkqnDxxD1J&amp;clipt=EPOqmggYw9CcCA"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-    />
-  );
-}
-
-function RedGifsEmbed({ id }: { id: string }) {
-  return <IFrame src={`https://redgifs.com/ifr/${id}`} />;
 }
 
 function DialogMain({ post }: { post: PostData }) {
@@ -239,10 +161,6 @@ function DialogMain({ post }: { post: PostData }) {
     return <img className="main-thumb" src={post.thumb} alt={post.title} />;
 
   return null;
-}
-
-function isImage(url: string): boolean {
-  return (url.match('.jpg|.png|.jpeg|.gif|.svg|.webp|.tiff|.bmp') && true) || false;
 }
 
 function imageUrl(id: string, meta: string): string {
