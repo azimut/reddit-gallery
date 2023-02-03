@@ -1,4 +1,4 @@
-import { useLocation, Route, Redirect } from 'wouter';
+import { Route, Redirect, RouteComponentProps } from 'wouter';
 import './App.css';
 import { RefObject, useEffect, useReducer, useRef, useState } from 'react';
 import { Reddit, Child } from '../src/types';
@@ -300,14 +300,13 @@ function Gallery({ images, nextPage }: { images: Array<PostData>; nextPage: Func
   );
 }
 
-function SubReddit() {
-  const [location] = useLocation();
-  const { images, error, dispatch } = useGalleryFetch(location.slice(3));
+function SubReddit({ params }: RouteComponentProps) {
+  const { images, error, dispatch } = useGalleryFetch(params.sub);
   if (error) return <p>Error!</p>;
   return (
     <>
       <header>
-        <h2>{location.slice(1)}</h2>
+        <h2>{`/r/${params.sub}`}</h2>
       </header>
       <Gallery images={images} nextPage={dispatch} />
       <button onClick={dispatch}>More</button>
@@ -322,7 +321,7 @@ function App() {
       <Route path="/r/">
         <Redirect to="/" />
       </Route>
-      <Route path="/r/:id" component={SubReddit} />
+      <Route path="/r/:sub" component={SubReddit} />
     </div>
   );
 }
