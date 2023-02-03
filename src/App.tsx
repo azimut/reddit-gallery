@@ -32,7 +32,9 @@ type PostData = {
   embed: string;
 };
 
-function useGalleryFetch(subreddit: string) {
+type Listings = 'new' | 'hot' | 'random' | 'rising' | 'top';
+
+function useGalleryFetch(subreddit: string, listing: Listings) {
   const [images, setImages] = useState<Array<PostData>>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -42,7 +44,7 @@ function useGalleryFetch(subreddit: string) {
   useEffect(() => {
     setLoading(true);
     fetch(
-      `https://www.reddit.com/r/${subreddit}/new/.json?limit=${API_LIMIT}&count=${count}&after=${after}`,
+      `https://www.reddit.com/r/${subreddit}/${listing}/.json?limit=${API_LIMIT}&count=${count}&after=${after}`,
     )
       .then((res) => res.json())
       .then((subreddit: Reddit) => {
@@ -301,7 +303,10 @@ function Gallery({ images, nextPage }: { images: Array<PostData>; nextPage: Func
 }
 
 function SubReddit({ params }: RouteComponentProps) {
-  const { images, error, dispatch } = useGalleryFetch(params.sub);
+  const { images, error, dispatch } = useGalleryFetch(
+    params.sub,
+    (params.listing || 'new') as Listings,
+  );
   if (error) return <p>Error!</p>;
   return (
     <>
@@ -321,6 +326,7 @@ function App() {
       <Route path="/r/">
         <Redirect to="/" />
       </Route>
+      <Route path="/r/:sub/:listing" component={SubReddit} />
       <Route path="/r/:sub" component={SubReddit} />
     </div>
   );
