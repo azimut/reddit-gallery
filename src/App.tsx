@@ -33,8 +33,20 @@ type PostData = {
   embed: string;
 };
 
+function redditThumbnail(child: Child): string {
+  if (isUrl(child.data.thumbnail)) {
+    return child.data.thumbnail;
+  }
+  if (isImage(child.data.url)) {
+    return child.data.url;
+  }
+  if (child.data.is_gallery && child.data.media_metadata) {
+    return redditGallery(child)?.reverse()?.pop() || '';
+  }
+  return '';
+}
 
-function useGalleryFetch(subreddit: string, listing: Listings) {
+function useGalleryFetch(subreddit: string, listing: string) {
   const [images, setImages] = useState<Array<PostData>>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -57,9 +69,7 @@ function useGalleryFetch(subreddit: string, listing: Listings) {
               created: child.data.created_utc,
               num_comments: child.data.num_comments,
               author: child.data.author,
-              thumb:
-                (isUrl(child.data.thumbnail) && child.data.thumbnail) ||
-                decode(child.data.url),
+              thumb: redditThumbnail(child),
               domain: child.data.domain,
               url:
                 redditVideo(child) || redditGallery(child)[0] || decode(child.data.url),
