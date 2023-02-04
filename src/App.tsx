@@ -33,7 +33,6 @@ type PostData = {
   embed: string;
 };
 
-type Listings = 'new' | 'hot' | 'random' | 'rising' | 'top';
 
 function useGalleryFetch(subreddit: string, listing: Listings) {
   const [images, setImages] = useState<Array<PostData>>([]);
@@ -306,16 +305,13 @@ function Gallery({ images, nextPage }: { images: Array<PostData>; nextPage: Func
   );
 }
 
-function SubReddit({ params }: RouteComponentProps) {
-  const { images, error, dispatch } = useGalleryFetch(
-    params.sub,
-    (params.listing || 'new') as Listings,
-  );
+function SubReddit(sub: string, listing: string = 'new') {
+  const { images, error, dispatch } = useGalleryFetch(sub, listing);
   if (error) return <p>Error!</p>;
   return (
     <>
       <header>
-        <h2>{`/r/${params.sub}`}</h2>
+        <h2>{`/r/${sub}`}</h2>
       </header>
       <Gallery images={images} nextPage={dispatch} />
       <button onClick={dispatch}>More</button>
@@ -330,8 +326,12 @@ function App() {
       <Route path="/r/">
         <Redirect to="/" />
       </Route>
-      <Route path="/r/:sub/:listing" component={SubReddit} />
-      <Route path="/r/:sub" component={SubReddit} />
+      <Route path="/r/:sub/rising">{(params) => SubReddit(params.sub, 'rising')}</Route>
+      <Route path="/r/:sub/hot">{(params) => SubReddit(params.sub, 'hot')}</Route>
+      <Route path="/r/:sub/new">{(params) => SubReddit(params.sub, 'new')}</Route>
+      <Route path="/r/:sub/top">{(params) => SubReddit(params.sub, 'top')}</Route>
+      <Route path="/r/:sub/new">{(params) => SubReddit(params.sub, 'new')}</Route>
+      <Route path="/r/:sub">{(params) => SubReddit(params.sub)}</Route>
     </div>
   );
 }
