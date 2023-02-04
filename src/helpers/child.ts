@@ -12,6 +12,8 @@ export function redditThumbnail(child: Child): string {
   if (child.data.is_gallery && child.data.media_metadata) {
     return redditGallery(child)?.reverse()?.pop() || '';
   }
+  if (child.data.url.includes('youtube.com/shorts/'))
+    return `https://i.ytimg.com/vi/${child.data.url.split('/').pop()}/hqdefault.jpg`;
   return '';
 }
 
