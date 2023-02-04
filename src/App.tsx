@@ -1,11 +1,13 @@
-import { Route, Redirect, RouteComponentProps } from 'wouter';
-import './App.css';
+import { Route, Redirect } from 'wouter';
 import { RefObject, useEffect, useReducer, useRef, useState } from 'react';
-import { Reddit, Child } from '../src/types';
 import { decode } from 'html-entities';
 import { format, formatDistance, fromUnixTime } from 'date-fns';
 
+import './App.css';
+import { Reddit } from './types';
 import { API_LIMIT, NITTER_DOMAIN } from './constants';
+import { isImage } from './helpers/validators';
+import { redditUrl, redditThumbnail } from './helpers/child';
 
 import GfycatEmbed from './components/molecules/GfycatEmbed';
 import YoutubeEmbed from './components/molecules/YoutubeEmbed';
@@ -13,12 +15,10 @@ import TwitchEmbed from './components/molecules/TwitchEmbed';
 import TwitchClipEmbed from './components/molecules/TwitchClipEmbed';
 import StreamableEmbed from './components/molecules/StreamableEmbed';
 import RedGifsEmbed from './components/molecules/RedGifsEmbed';
-
 import IFrame from './components/atoms/IFrame';
 import Anchor from './components/atoms/Anchor';
 import Video from './components/atoms/Video';
 import Welcome from './components/pages/Welcome';
-import { isUrl, isImage } from './helpers/validators';
 
 type PostData = {
   created: number;
@@ -32,19 +32,6 @@ type PostData = {
   title: string;
   embed: string;
 };
-
-function redditThumbnail(child: Child): string {
-  if (isUrl(child.data.thumbnail)) {
-    return child.data.thumbnail;
-  }
-  if (isImage(child.data.url)) {
-    return child.data.url;
-  }
-  if (child.data.is_gallery && child.data.media_metadata) {
-    return redditGallery(child)?.reverse()?.pop() || '';
-  }
-  return '';
-}
 
 function useGalleryFetch(subreddit: string, listing: string) {
   const [images, setImages] = useState<Array<PostData>>([]);
@@ -71,8 +58,7 @@ function useGalleryFetch(subreddit: string, listing: string) {
               author: child.data.author,
               thumb: redditThumbnail(child),
               domain: child.data.domain,
-              url:
-                redditVideo(child) || redditGallery(child)[0] || decode(child.data.url),
+              url: redditUrl(child),
               embed: child.data.secure_media_embed?.media_domain_url || '',
               permalink: `https://old.reddit.com${child.data.permalink}`,
               title: decode(child.data.title),
@@ -176,27 +162,6 @@ function DialogMain({ post }: { post: PostData }) {
     return <img className="main-thumb" src={post.thumb} alt={post.title} />;
 
   return null;
-}
-
-function imageUrl(id: string, meta: string): string {
-  const url = 'https://i.redd.it';
-  if (meta === 'image/png') return `${url}/${id}.png`;
-  if (meta === 'image/jpg') return `${url}/${id}.jpg`;
-  if (meta === 'image/gif') return `${url}/${id}.gif`;
-  return '';
-}
-
-function redditVideo(child: Child): string | null {
-  if (!child.data.is_video) return null;
-  if (!child.data.media?.reddit_video) return null;
-  return child.data.media.reddit_video.fallback_url;
-}
-
-function redditGallery(child: Child): Array<string> {
-  if (!child.data.is_gallery || !child.data.media_metadata) return [];
-  return Object.entries(child.data.media_metadata)
-    .map(([id, meta]) => imageUrl(id, meta.m))
-    .filter((s) => s !== '');
 }
 
 function DialogDescription({ post }: { post: PostData }) {
