@@ -80,15 +80,20 @@ function DialogMain({ post }: { post: PostData }) {
   const { pathname, searchParams } = new URL(post.url);
   const slicedPathname = pathname.slice(1);
 
-  if (['vocaroo.com', 'voca.ro'].includes(post.domain)) {
+  if (isImage(pathname)) return <img src={post.url} alt={post.title} />;
+  if (isImage(post.thumb))
+    return <img className="main-thumb" src={post.thumb} alt={post.title} />;
+
+  if (['vocaroo.com', 'voca.ro'].includes(post.domain))
     return <VocarooEmbed id={slicedPathname} />;
-  }
-  if (post.domain === 'gfycat.com') {
-    return <GfycatEmbed url={post.url} />;
-  }
-  if (post.domain === 'clips.twitch.tv') {
-    return <TwitchClipEmbed clip={slicedPathname} />;
-  }
+  if (post.domain === 'redgifs.com')
+    return <RedGifsEmbed id={pathname.split('/').reverse()[0]} />;
+
+  if (post.domain === 'v.redd.it') return <Video url={post.url} />;
+  if (post.domain === 'streamable.com') return <StreamableEmbed id={slicedPathname} />;
+  if (post.domain === 'gfycat.com') return <GfycatEmbed url={post.url} />;
+  if (post.domain === 'clips.twitch.tv') return <TwitchClipEmbed clip={slicedPathname} />;
+
   if (
     ['www.twitch.tv', 'twitch.tv'].includes(post.domain) &&
     pathname.split('/')[2] === 'clip'
@@ -103,9 +108,7 @@ function DialogMain({ post }: { post: PostData }) {
     const t = searchParams.get('t');
     if (t) return <TwitchEmbed video={pathname.split('/')[2]} time={t} />;
   }
-  if (post.domain === 'streamable.com') {
-    return <StreamableEmbed id={slicedPathname} />;
-  }
+
   if (['youtube.com', 'www.youtube.com', 'm.youtube.com'].includes(post.domain)) {
     const v = searchParams.get('v');
     const t = searchParams.get('t');
@@ -118,13 +121,12 @@ function DialogMain({ post }: { post: PostData }) {
         />
       );
   }
+
   if (post.domain === 'youtu.be') {
     const t = searchParams.get('t');
     return <YoutubeEmbed id={slicedPathname} start={t} />;
   }
-  if (post.domain === 'v.redd.it') {
-    return <Video url={post.url} />;
-  }
+
   if (['twitter.com', 'm.twitter.com'].includes(post.domain)) {
     if (post.embed.length > 0) {
       return <IFrame src={post.embed} className="reddit-iframe" />;
@@ -143,9 +145,7 @@ function DialogMain({ post }: { post: PostData }) {
       );
     }
   }
-  if (post.domain === 'redgifs.com') {
-    return <RedGifsEmbed id={pathname.split('/').reverse()[0]} />;
-  }
+
   if (
     post.domain === 'imgur.com' &&
     slicedPathname.split('/').length === 1 &&
@@ -161,11 +161,6 @@ function DialogMain({ post }: { post: PostData }) {
     return (
       <img src={`https://i.imgflip.com/${pathname.slice(3)}.jpg`} alt={post.title} />
     );
-
-  if (isImage(pathname)) return <img src={post.url} alt={post.title} />;
-
-  if (isImage(post.thumb))
-    return <img className="main-thumb" src={post.thumb} alt={post.title} />;
 
   return null;
 }
