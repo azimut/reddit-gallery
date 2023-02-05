@@ -9,6 +9,7 @@ import { API_LIMIT, NITTER_DOMAIN } from './constants';
 import { isImage } from './helpers/validators';
 import { redditUrl, redditThumbnail } from './helpers/child';
 
+import GiphyEmbed from './components/molecules/GiphyEmbed';
 import VocarooEmbed from './components/molecules/VocarooEmbed';
 import GfycatEmbed from './components/molecules/GfycatEmbed';
 import YoutubeEmbed from './components/molecules/YoutubeEmbed';
@@ -80,15 +81,12 @@ function DialogMain({ post }: { post: PostData }) {
   const { pathname, searchParams } = new URL(post.url);
   const slicedPathname = pathname.slice(1);
 
-  if (isImage(pathname)) return <img src={post.url} alt={post.title} />;
-  if (isImage(post.thumb))
-    return <img className="main-thumb" src={post.thumb} alt={post.title} />;
-
   if (['vocaroo.com', 'voca.ro'].includes(post.domain))
     return <VocarooEmbed id={slicedPathname} />;
   if (post.domain === 'redgifs.com')
     return <RedGifsEmbed id={pathname.split('/').reverse()[0]} />;
 
+  if (post.domain === 'giphy.com') return <GiphyEmbed path={pathname} />;
   if (post.domain === 'v.redd.it') return <Video url={post.url} />;
   if (post.domain === 'streamable.com') return <StreamableEmbed id={slicedPathname} />;
   if (post.domain === 'gfycat.com') return <GfycatEmbed url={post.url} />;
@@ -161,6 +159,10 @@ function DialogMain({ post }: { post: PostData }) {
     return (
       <img src={`https://i.imgflip.com/${pathname.slice(3)}.jpg`} alt={post.title} />
     );
+
+  if (isImage(pathname)) return <img src={post.url} alt={post.title} />;
+  if (isImage(post.thumb))
+    return <img className="main-thumb" src={post.thumb} alt={post.title} />;
 
   return null;
 }
