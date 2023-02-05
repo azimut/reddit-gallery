@@ -33,17 +33,18 @@ type PostData = {
   embed: string;
 };
 
-function useGalleryFetch(subreddit: string, listing: string) {
+function useGalleryFetch(subreddit: string, listing: string, period: string) {
   const [images, setImages] = useState<Array<PostData>>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [count, setCount] = useState(0);
   const [after, setAfter] = useState('');
   const [trigger, dispatch] = useReducer((t) => !t, false);
+  const t = period && `&t=${period}`;
   useEffect(() => {
     setLoading(true);
     fetch(
-      `https://www.reddit.com/r/${subreddit}/${listing}/.json?limit=${API_LIMIT}&count=${count}&after=${after}`,
+      `https://www.reddit.com/r/${subreddit}/${listing}/.json?limit=${API_LIMIT}&count=${count}&after=${after}${t}`,
     )
       .then((res) => res.json())
       .then((subreddit: Reddit) => {
@@ -280,13 +281,13 @@ function Gallery({ images, nextPage }: { images: Array<PostData>; nextPage: Func
   );
 }
 
-function SubReddit(sub: string, listing: string = 'new') {
-  const { images, error, dispatch } = useGalleryFetch(sub, listing);
+function SubReddit(sub: string, listing: string = 'new', period: string = '') {
+  const { images, error, dispatch } = useGalleryFetch(sub, listing, period);
   if (error) return <p>Error!</p>;
   return (
     <>
       <header>
-        <h2>{`/r/${sub}`}</h2>
+        <h2>{`/r/${sub} (${listing})`}</h2>
       </header>
       <Gallery images={images} nextPage={dispatch} />
       <button onClick={dispatch}>More</button>
@@ -301,12 +302,18 @@ function App() {
       <Route path="/r/">
         <Redirect to="/" />
       </Route>
-      <Route path="/r/:sub/rising">{(params) => SubReddit(params.sub, 'rising')}</Route>
-      <Route path="/r/:sub/hot">{(params) => SubReddit(params.sub, 'hot')}</Route>
-      <Route path="/r/:sub/new">{(params) => SubReddit(params.sub, 'new')}</Route>
-      <Route path="/r/:sub/top">{(params) => SubReddit(params.sub, 'top')}</Route>
-      <Route path="/r/:sub/new">{(params) => SubReddit(params.sub, 'new')}</Route>
-      <Route path="/r/:sub">{(params) => SubReddit(params.sub)}</Route>
+      <Route path="/r/:sub/top/hour">{(p) => SubReddit(p.sub, 'top', 'hour')}</Route>
+      <Route path="/r/:sub/top/day">{(p) => SubReddit(p.sub, 'top', 'day')}</Route>
+      <Route path="/r/:sub/top/week">{(p) => SubReddit(p.sub, 'top', 'week')}</Route>
+      <Route path="/r/:sub/top/month">{(p) => SubReddit(p.sub, 'top', 'month')}</Route>
+      <Route path="/r/:sub/top/year">{(p) => SubReddit(p.sub, 'top', 'year')}</Route>
+      <Route path="/r/:sub/top/all">{(p) => SubReddit(p.sub, 'top', 'all')}</Route>
+      <Route path="/r/:sub/top">{(p) => SubReddit(p.sub, 'top')}</Route>
+      <Route path="/r/:sub/rising">{(p) => SubReddit(p.sub, 'rising')}</Route>
+      <Route path="/r/:sub/hot">{(p) => SubReddit(p.sub, 'hot')}</Route>
+      <Route path="/r/:sub/new">{(p) => SubReddit(p.sub, 'new')}</Route>
+      <Route path="/r/:sub/new">{(p) => SubReddit(p.sub, 'new')}</Route>
+      <Route path="/r/:sub">{(p) => SubReddit(p.sub)}</Route>
     </div>
   );
 }
