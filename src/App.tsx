@@ -9,6 +9,7 @@ import { API_LIMIT, NITTER_DOMAIN } from './constants';
 import { isImage } from './helpers/validators';
 import { redditUrl, redditThumbnail } from './helpers/child';
 
+import VocarooEmbed from './components/molecules/VocarooEmbed';
 import GfycatEmbed from './components/molecules/GfycatEmbed';
 import YoutubeEmbed from './components/molecules/YoutubeEmbed';
 import TwitchEmbed from './components/molecules/TwitchEmbed';
@@ -78,6 +79,10 @@ function DialogMain({ post }: { post: PostData }) {
   if (post.url === '') return null;
   const { pathname, searchParams } = new URL(post.url);
   const slicedPathname = pathname.slice(1);
+
+  if (['vocaroo.com', 'voca.ro'].includes(post.domain)) {
+    return <VocarooEmbed id={slicedPathname} />;
+  }
   if (post.domain === 'gfycat.com') {
     return <GfycatEmbed url={post.url} />;
   }
