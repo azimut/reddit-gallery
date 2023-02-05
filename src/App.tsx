@@ -21,16 +21,16 @@ import Video from './components/atoms/Video';
 import Welcome from './components/pages/Welcome';
 
 type PostData = {
-  created: number;
-  score: number;
-  num_comments: number;
   author: string;
-  thumb: string;
+  created: number;
   domain: string;
-  url: string;
-  permalink: string;
-  title: string;
   embed: string;
+  num_comments: number;
+  permalink: string;
+  score: number;
+  thumb: string;
+  title: string;
+  url: string;
 };
 
 function useGalleryFetch(subreddit: string, listing: string, period: string) {
@@ -53,16 +53,16 @@ function useGalleryFetch(subreddit: string, listing: string, period: string) {
           const next = subreddit.data.children
             .filter((i) => !i.data.is_self)
             .map((child) => ({
-              score: child.data.score,
-              created: child.data.created_utc,
-              num_comments: child.data.num_comments,
               author: child.data.author,
-              thumb: redditThumbnail(child),
+              created: child.data.created_utc,
               domain: child.data.domain,
-              url: redditUrl(child),
               embed: child.data.secure_media_embed?.media_domain_url || '',
+              num_comments: child.data.num_comments,
               permalink: `https://old.reddit.com${child.data.permalink}`,
+              score: child.data.score,
+              thumb: redditThumbnail(child),
               title: decode(child.data.title),
+              url: redditUrl(child),
             }));
           return (count === 0 && next) || prev.concat(next);
         });
