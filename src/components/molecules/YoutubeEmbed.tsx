@@ -6,21 +6,9 @@ export default function YoutubeEmbed({
   start,
 }: {
   id: string;
-  start: string | null;
+  start: string | null | undefined;
 }) {
-  if (start) {
-    return (
-      <IFrame
-        src={`https://www.youtube-nocookie.com/embed/${id}?modestbranding=1&rel=0&iv_load_policy=3&cc_load_policy=1&autoplay=0&start=${start}`}
-        allow="autoplay; encrypted-media"
-      />
-    );
-  } else {
-    return (
-      <IFrame
-        src={`https://www.youtube-nocookie.com/embed/${id}?modestbranding=1&rel=0&iv_load_policy=3&cc_load_policy=1&autoplay=0`}
-        allow="autoplay; encrypted-media"
-      />
-    );
-  }
+  let url = `https://www.youtube-nocookie.com/embed/${id}?modestbranding=1&rel=0&iv_load_policy=3&cc_load_policy=1&autoplay=0`;
+  if (start) url += `&start=${start}`;
+  return <IFrame src={`${url}`} allow="autoplay; encrypted-media" />;
 }

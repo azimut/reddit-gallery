@@ -35,7 +35,11 @@ type PostData = {
   url: string;
 };
 
-function useGalleryFetch(subreddit: string, listing: string, period: string) {
+function useGalleryFetch(
+  subreddit: string,
+  listing: string,
+  period: string,
+): { images: PostData[]; loading: boolean; error: boolean; dispatch: any } {
   const [images, setImages] = useState<Array<PostData>>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -109,7 +113,7 @@ function DialogMain({ post }: { post: PostData }) {
 
   if (['youtube.com', 'www.youtube.com', 'm.youtube.com'].includes(post.domain)) {
     const v = searchParams.get('v');
-    const t = searchParams.get('t');
+    const t = searchParams.get('t')?.replace(/s$/, '');
     if (v) return <YoutubeEmbed id={v} start={t} />;
     if (pathname.includes('/shorts/'))
       return (
