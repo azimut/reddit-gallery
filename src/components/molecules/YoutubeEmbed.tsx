@@ -10,5 +10,5 @@ export default function YoutubeEmbed({
 }) {
   let url = `https://www.youtube-nocookie.com/embed/${id}?modestbranding=1&rel=0&iv_load_policy=3&cc_load_policy=1&autoplay=0`;
   if (start) url += `&start=${start}`;
-  return <IFrame src={`${url}`} allow="autoplay; encrypted-media" />;
+  return <IFrame src={url} />;
 }
