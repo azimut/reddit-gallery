@@ -1,5 +1,5 @@
 import { Route, Redirect } from 'wouter';
-import { RefObject, useEffect, useReducer, useRef, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import { decode } from 'html-entities';
 import { format, formatDistance, fromUnixTime } from 'date-fns';
 
@@ -9,6 +9,7 @@ import { API_LIMIT, NITTER_DOMAIN } from './constants';
 import { isImage } from './helpers/validators';
 import { redditUrl, redditThumbnail } from './helpers/child';
 
+import useFocus from './hooks/useFocus';
 import GiphyEmbed from './components/molecules/GiphyEmbed';
 import VocarooEmbed from './components/molecules/VocarooEmbed';
 import GfycatEmbed from './components/molecules/GfycatEmbed';
@@ -210,12 +211,6 @@ function Dialog({
       </figure>
     </dialog>
   );
-}
-
-function useFocus(): RefObject<HTMLElement> {
-  const refToFocus = useRef<HTMLElement>(null);
-  useEffect(() => refToFocus.current?.focus(), [refToFocus]);
-  return refToFocus;
 }
 
 function Gallery({ images, nextPage }: { images: Array<PostData>; nextPage: Function }) {
