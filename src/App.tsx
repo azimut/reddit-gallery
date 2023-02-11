@@ -126,7 +126,7 @@ function DialogMain({ post }: { post: PostData }) {
   }
 
   if (post.domain === 'youtu.be') {
-    const t = searchParams.get('t');
+    const t = searchParams.get('t')?.replace(/s$/, '');
     return <YoutubeEmbed id={slicedPathname} start={t} />;
   }
 
