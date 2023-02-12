@@ -280,7 +280,16 @@ function Gallery({ images, nextPage }: { images: Array<PostData>; nextPage: Func
   );
 }
 
-function SubReddit(sub: string, listing: string = 'new', period: string = '') {
+function SubReddit({
+  sub,
+  listing,
+  period,
+}: {
+  sub: string | undefined;
+  listing: string;
+  period: string;
+}) {
+  if (!sub) return <>Error! no sub?</>;
   const { images, error, dispatch, isLoading } = useGalleryFetch(sub, listing, period);
   const infinityRef = useInfinity({ onViewport: dispatch, rootMargin: '100px' });
   if (error) return <p>Error!</p>;
@@ -299,21 +308,22 @@ function App() {
   return (
     <div className="App">
       <Route path="/" component={Welcome} />
-      <Route path="/r/">
+
+      <Route path="/r/:sub">
+        {(p) => <SubReddit sub={p.sub} listing="new" period="" />}
+      </Route>
+
+      <Route path="/r/:sub/:listing">
+        {(p) => <SubReddit sub={p.sub} listing={p.listing || 'new'} period="" />}
+      </Route>
+
+      <Route path="/r/:sub/top/:period">
+        {(p) => <SubReddit sub={p.sub} listing="top" period={p.period || ''} />}
+      </Route>
+
+      <Route path="/:catch-all">
         <Redirect to="/" />
       </Route>
-      <Route path="/r/:sub/top/hour">{(p) => SubReddit(p.sub, 'top', 'hour')}</Route>
-      <Route path="/r/:sub/top/day">{(p) => SubReddit(p.sub, 'top', 'day')}</Route>
-      <Route path="/r/:sub/top/week">{(p) => SubReddit(p.sub, 'top', 'week')}</Route>
-      <Route path="/r/:sub/top/month">{(p) => SubReddit(p.sub, 'top', 'month')}</Route>
-      <Route path="/r/:sub/top/year">{(p) => SubReddit(p.sub, 'top', 'year')}</Route>
-      <Route path="/r/:sub/top/all">{(p) => SubReddit(p.sub, 'top', 'all')}</Route>
-      <Route path="/r/:sub/top">{(p) => SubReddit(p.sub, 'top')}</Route>
-      <Route path="/r/:sub/rising">{(p) => SubReddit(p.sub, 'rising')}</Route>
-      <Route path="/r/:sub/hot">{(p) => SubReddit(p.sub, 'hot')}</Route>
-      <Route path="/r/:sub/new">{(p) => SubReddit(p.sub, 'new')}</Route>
-      <Route path="/r/:sub/new">{(p) => SubReddit(p.sub, 'new')}</Route>
-      <Route path="/r/:sub">{(p) => SubReddit(p.sub)}</Route>
     </div>
   );
 }
