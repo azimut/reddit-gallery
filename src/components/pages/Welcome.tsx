@@ -3,6 +3,7 @@ import { useLocation } from 'wouter';
 import redditLogo from '../../assets/reddit-svgrepo-com.svg';
 import Anchor from '../atoms/Anchor';
 import Search from '../molecules/Search';
+import './Welcome.css';
 
 export default function Welcome() {
   const [_, pushLocation] = useLocation();
