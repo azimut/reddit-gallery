@@ -9,6 +9,7 @@ import { API_LIMIT, NITTER_DOMAIN } from './constants';
 import { isImage } from './helpers/validators';
 import { redditUrl, redditThumbnail } from './helpers/child';
 
+import useInfinity from './hooks/useInfinity';
 import useFocus from './hooks/useFocus';
 import GiphyEmbed from './components/molecules/GiphyEmbed';
 import VocarooEmbed from './components/molecules/VocarooEmbed';
@@ -36,20 +37,16 @@ type PostData = {
   url: string;
 };
 
-function useGalleryFetch(
-  subreddit: string,
-  listing: string,
-  period: string,
-): { images: PostData[]; loading: boolean; error: boolean; dispatch: any } {
+function useGalleryFetch(subreddit: string, listing: string, period: string) {
   const [images, setImages] = useState<Array<PostData>>([]);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
   const [count, setCount] = useState(0);
   const [after, setAfter] = useState('');
   const [trigger, dispatch] = useReducer((t) => !t, false);
   const t = period && `&t=${period}`;
   useEffect(() => {
-    setLoading(true);
+    setIsLoading(true);
     fetch(
       `https://www.reddit.com/r/${subreddit}/${listing}/.json?limit=${API_LIMIT}&count=${count}&after=${after}${t}`,
     )
@@ -76,9 +73,9 @@ function useGalleryFetch(
         setCount((prevCount) => prevCount + API_LIMIT);
       })
       .catch(() => setError(true))
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, [trigger]);
-  return { images, loading, error, dispatch };
+  return { images, isLoading, error, dispatch };
 }
 
 function DialogMain({ post }: { post: PostData }) {
@@ -217,7 +214,8 @@ function Gallery({ images, nextPage }: { images: Array<PostData>; nextPage: Func
   const [open, setOpen] = useState(false);
   const [content, setContent] = useState<PostData | null>(null);
   const [idx, setIdx] = useState(-1);
-  const ref = useFocus();
+  const focusRef = useFocus();
+
   const nextItem = () => {
     setIdx((old) => {
       if (old > Math.max(0, images.length - 5) && old <= Math.max(0, images.length)) {
@@ -237,7 +235,7 @@ function Gallery({ images, nextPage }: { images: Array<PostData>; nextPage: Func
   };
   const closeDialog = () => {
     setOpen(false);
-    ref.current?.focus();
+    focusRef.current?.focus();
   };
   const onClickDialog = closeDialog;
   const onClickImage = (i: number) => setIdx(i);
@@ -250,7 +248,7 @@ function Gallery({ images, nextPage }: { images: Array<PostData>; nextPage: Func
   }, [content]);
   return (
     <main
-      ref={ref}
+      ref={focusRef}
       tabIndex={0}
       className="gallery"
       onKeyDown={(e) => {
@@ -283,7 +281,8 @@ function Gallery({ images, nextPage }: { images: Array<PostData>; nextPage: Func
 }
 
 function SubReddit(sub: string, listing: string = 'new', period: string = '') {
-  const { images, error, dispatch } = useGalleryFetch(sub, listing, period);
+  const { images, error, dispatch, isLoading } = useGalleryFetch(sub, listing, period);
+  const infinityRef = useInfinity({ onViewport: dispatch, rootMargin: '100px' });
   if (error) return <p>Error!</p>;
   return (
     <>
@@ -291,7 +290,7 @@ function SubReddit(sub: string, listing: string = 'new', period: string = '') {
         <h2>{`/r/${sub} (${listing})`}</h2>
       </header>
       <Gallery images={images} nextPage={dispatch} />
-      <button onClick={dispatch}>More</button>
+      {images.length > 0 && !isLoading && <div ref={infinityRef}>Loading</div>}
     </>
   );
 }
