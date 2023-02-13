@@ -37,20 +37,20 @@ type PostData = {
 
 function useGalleryFetch(subreddit: string, listing: string, period: string) {
   const [images, setImages] = useState<Array<PostData>>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
   const [count, setCount] = useState(0);
   const [after, setAfter] = useState('');
   const [trigger, dispatch] = useReducer((t) => !t, false);
-  const t = period && `&t=${period}`;
+  const [hasMorePages, setHasMorePages] = useState(false);
+  const url = `https://www.reddit.com/r/${subreddit}/${listing}/.json?limit=${API_LIMIT}&count=${count}&after=${after}&t=${period}`;
   useEffect(() => {
     setIsLoading(true);
-    fetch(
-      `https://www.reddit.com/r/${subreddit}/${listing}/.json?limit=${API_LIMIT}&count=${count}&after=${after}${t}`,
-    )
+    fetch(url)
       .then((res) => res.json())
       .then((subreddit: Reddit) => {
         setAfter(subreddit.data.after || '');
+        setHasMorePages(subreddit.data.after !== null);
         setImages((prev) => {
           const next = subreddit.data.children
             .filter((i) => !i.data.is_self)
@@ -73,7 +73,7 @@ function useGalleryFetch(subreddit: string, listing: string, period: string) {
       .catch(() => setError(true))
       .finally(() => setIsLoading(false));
   }, [trigger]);
-  return { images, isLoading, error, dispatch };
+  return { images, isLoading, error, dispatch, hasMorePages };
 }
 
 function DialogMain({ post }: { post: PostData }) {
@@ -288,7 +288,11 @@ export default function SubReddit({
   period: string;
 }) {
   if (!sub) return <>Error! no sub?</>;
-  const { images, error, dispatch, isLoading } = useGalleryFetch(sub, listing, period);
+  const { images, error, dispatch, isLoading, hasMorePages } = useGalleryFetch(
+    sub,
+    listing,
+    period,
+  );
   const infinityRef = useInfinity({ onViewport: dispatch, rootMargin: '100px' });
   if (error) return <p>Error!</p>;
   return (
@@ -297,7 +301,7 @@ export default function SubReddit({
         <h2>{`/r/${sub} (${listing})`}</h2>
       </header>
       <Gallery images={images} nextPage={dispatch} />
-      {images.length > 0 && !isLoading && <div ref={infinityRef}>Loading</div>}
+      {!isLoading && hasMorePages ? <div ref={infinityRef}>Loading...</div> : null}
     </>
   );
 }
