@@ -11,15 +11,15 @@ export default function App() {
       <Route path="/" component={Welcome} />
 
       <Route path="/r/:sub">
-        {(p) => <SubReddit sub={p.sub} listing="new" period="" />}
+        {(p) => <SubReddit sub={p.sub || 'all'} listing="new" period="" />}
       </Route>
 
       <Route path="/r/:sub/:listing">
-        {(p) => <SubReddit sub={p.sub} listing={p.listing || 'new'} period="" />}
+        {(p) => <SubReddit sub={p.sub || 'all'} listing={p.listing || 'new'} period="" />}
       </Route>
 
       <Route path="/r/:sub/top/:period">
-        {(p) => <SubReddit sub={p.sub} listing="top" period={p.period || ''} />}
+        {(p) => <SubReddit sub={p.sub || 'all'} listing="top" period={p.period || ''} />}
       </Route>
 
       <Route path="/:default">

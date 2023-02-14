@@ -41,7 +41,7 @@ function useGalleryFetch(subreddit: string, listing: string, period: string) {
   const [error, setError] = useState(false);
   const [count, setCount] = useState(0);
   const [after, setAfter] = useState('');
-  const [trigger, dispatch] = useReducer((t) => !t, false);
+  const [trigger, fetchMore] = useReducer((t) => !t, false);
   const [hasMorePages, setHasMorePages] = useState(false);
   const url = `https://www.reddit.com/r/${subreddit}/${listing}/.json?limit=${API_LIMIT}&count=${count}&after=${after}&t=${period}`;
   useEffect(() => {
@@ -73,7 +73,7 @@ function useGalleryFetch(subreddit: string, listing: string, period: string) {
       .catch(() => setError(true))
       .finally(() => setIsLoading(false));
   }, [trigger]);
-  return { images, isLoading, error, dispatch, hasMorePages };
+  return { images, isLoading, error, fetchMore, hasMorePages };
 }
 
 function DialogMain({ post }: { post: PostData }) {
@@ -235,7 +235,6 @@ function Gallery({ images, nextPage }: { images: Array<PostData>; nextPage: Func
     setOpen(false);
     focusRef.current?.focus();
   };
-  const onClickDialog = closeDialog;
   const onClickImage = (i: number) => setIdx(i);
   useEffect(() => setContent(images[idx]), [idx]);
   useEffect(() => {
@@ -273,7 +272,7 @@ function Gallery({ images, nextPage }: { images: Array<PostData>; nextPage: Func
             </div>
           ),
       )}
-      {images.length > 0 && <Dialog open={open} post={content} onClick={onClickDialog} />}
+      {images.length > 0 && <Dialog open={open} post={content} onClick={closeDialog} />}
     </main>
   );
 }
@@ -283,25 +282,25 @@ export default function SubReddit({
   listing,
   period,
 }: {
-  sub: string | undefined;
+  sub: string;
   listing: string;
   period: string;
 }) {
-  if (!sub) return <>Error! no sub?</>;
-  const { images, error, dispatch, isLoading, hasMorePages } = useGalleryFetch(
+  const { images, error, fetchMore, isLoading, hasMorePages } = useGalleryFetch(
     sub,
     listing,
     period,
   );
-  const infinityRef = useInfinity({ onViewport: dispatch, rootMargin: '100px' });
+  const infinityRef = useInfinity({ onViewport: fetchMore, rootMargin: '100px' });
   if (error) return <p>Error!</p>;
+  if (images.length === 0) return <p> Loading... </p>;
   return (
     <>
       <header>
         <h2>{`/r/${sub} (${listing})`}</h2>
       </header>
-      <Gallery images={images} nextPage={dispatch} />
-      {!isLoading && hasMorePages ? <div ref={infinityRef}>Loading...</div> : null}
+      <Gallery images={images} nextPage={fetchMore} />
+      {!isLoading && hasMorePages && <div ref={infinityRef}>Loading More...</div>}
     </>
   );
 }
