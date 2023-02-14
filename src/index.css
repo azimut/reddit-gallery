@@ -85,6 +85,11 @@ button:focus-visible {
   max-height: 250px;
   cursor: pointer;
 }
+@media (orientation: portrait) {
+  .item {
+    aspect-ratio: 1;
+  }
+}
 
 .item img {
   overflow: hidden;
