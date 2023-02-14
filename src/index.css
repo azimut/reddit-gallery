@@ -82,7 +82,7 @@ button:focus-visible {
 .item {
   display: flex;
   flex-direction: column;
-  max-height: 250px;
+  aspect-ratio: 4/3;
   cursor: pointer;
 }
 @media (orientation: portrait) {
