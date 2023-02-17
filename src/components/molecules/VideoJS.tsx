@@ -10,7 +10,6 @@ export default function VideoJS({ url }: { url: string }) {
     autoplay: true,
     controls: true,
     responsive: true,
-    fluid: true,
     sources: [
       {
         src: url,
@@ -22,7 +21,6 @@ export default function VideoJS({ url }: { url: string }) {
   useEffect(() => {
     if (!playerRef.current) {
       const videoElement = document.createElement('video-js');
-      videoElement.classList.add('vjs-big-play-centered');
       videoRef?.current?.appendChild(videoElement);
       playerRef.current = videojs(videoElement, videoJsOptions, () => {
         videojs.log('player is ready!');

@@ -82,13 +82,19 @@ function DialogMain({ post }: { post: PostData }) {
   const { pathname, searchParams } = new URL(post.url);
   const slicedPathname = pathname.slice(1);
 
+  if (post.url.endsWith('mp4')) {
+    return <Video url={post.url} />;
+  }
+
   if (['vocaroo.com', 'voca.ro'].includes(post.domain))
     return <VocarooEmbed id={slicedPathname} />;
   if (post.domain === 'redgifs.com')
     return <RedGifsEmbed id={pathname.split('/').reverse()[0]} />;
 
   if (post.domain === 'giphy.com') return <GiphyEmbed path={pathname} />;
-  if (post.domain === 'v.redd.it') return <VideoJS url={post.url} />;
+  if (post.domain === 'v.redd.it') {
+    return <VideoJS url={post.url} />;
+  }
   if (post.domain === 'streamable.com') return <StreamableEmbed id={slicedPathname} />;
   if (post.domain === 'gfycat.com') return <GfycatEmbed url={post.url} />;
   if (post.domain === 'clips.twitch.tv') return <TwitchClipEmbed clip={slicedPathname} />;

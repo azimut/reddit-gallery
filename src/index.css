@@ -152,13 +152,13 @@ button:focus-visible {
   }
 }
 
-.popup video {
-  max-height: 65vh;
-  max-width: 100%;
+.popup video-js {
+  height: 65vh;
+  width: 100%;
 }
 @media (min-width: 1200px) {
-  .popup video {
-    max-height: 84vh;
+  .popup video-js {
+    height: 85vh;
   }
 }
 
