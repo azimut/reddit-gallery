@@ -38,9 +38,5 @@ export default function VideoJS({ url }: { url: string }) {
     };
   }, [playerRef]);
 
-  return (
-    <div data-vjs-player>
-      <div ref={videoRef} />
-    </div>
-  );
+  return <div data-vjs-player className="vidjs" ref={videoRef} />;
 }

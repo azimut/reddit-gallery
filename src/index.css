@@ -152,9 +152,19 @@ button:focus-visible {
   }
 }
 
+.popup .default-video-player {
+  max-height: 65vh;
+}
+@media (min-width: 1200px) {
+  .popup .default-video-player {
+    max-height: 85vh;
+  }
+}
+
 .popup video-js {
-  height: 65vh;
   width: 100%;
+  height: 65vh;
+  background-color: rgba(0, 0, 0, 0);
 }
 @media (min-width: 1200px) {
   .popup video-js {
