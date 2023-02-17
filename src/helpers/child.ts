@@ -22,7 +22,8 @@ export function redditUrl(child: Child): string {
 }
 
 function redditVideo(child: Child): string | null {
-  if (!child.data.is_video) return null;
+  if (!child.data.is_video && child.data.media?.reddit_video?.hls_url)
+    return child.data.media.reddit_video.hls_url;
   if (!child.data.media?.reddit_video) return null;
   return child.data.media.reddit_video.fallback_url;
 }

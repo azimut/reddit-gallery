@@ -10,6 +10,7 @@ import { redditUrl, redditThumbnail } from '../../helpers/child';
 
 import useInfinity from '../../hooks/useInfinity';
 import useFocus from '../../hooks/useFocus';
+import VideoJS from '../../components/molecules/VideoJS';
 import GiphyEmbed from '../../components/molecules/GiphyEmbed';
 import VocarooEmbed from '../../components/molecules/VocarooEmbed';
 import GfycatEmbed from '../../components/molecules/GfycatEmbed';
@@ -87,7 +88,7 @@ function DialogMain({ post }: { post: PostData }) {
     return <RedGifsEmbed id={pathname.split('/').reverse()[0]} />;
 
   if (post.domain === 'giphy.com') return <GiphyEmbed path={pathname} />;
-  if (post.domain === 'v.redd.it') return <Video url={post.url} />;
+  if (post.domain === 'v.redd.it') return <VideoJS url={post.url} />;
   if (post.domain === 'streamable.com') return <StreamableEmbed id={slicedPathname} />;
   if (post.domain === 'gfycat.com') return <GfycatEmbed url={post.url} />;
   if (post.domain === 'clips.twitch.tv') return <TwitchClipEmbed clip={slicedPathname} />;
