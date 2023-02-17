@@ -370,13 +370,6 @@
   resolved "https://registry.yarnpkg.com/@types/semver/-/semver-7.3.13.tgz#da4bfd73f49bd541d28920ab0e2bf0ee80f71c91"
   integrity sha512-21cFJr9z3g5dW8B0CVI9g2O9beqaThGQ6ZFBqHfwhzLDKUxaqTIy3vnfah/UPkfOiF2pLq+tGz+W8RyCskuslw==
 
-"@types/wouter@^2.2.0":
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/@types/wouter/-/wouter-2.2.0.tgz#373c275c10493be001edd46fc0e8b16d3bca4347"
-  integrity sha512-TnMGR0eExgD5Pj11cp9kU26HommanlH1zDwBqbCg7tbQ01ystc1tCVjffZUrzXOrVfWNIf1FHSR4zHcUG0MHZw==
-  dependencies:
-    wouter "*"
-
 "@typescript-eslint/eslint-plugin@^5.30.7":
   version "5.51.0"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/eslint-plugin/-/eslint-plugin-5.51.0.tgz#da3f2819633061ced84bb82c53bba45a6fe9963a"
@@ -1715,7 +1708,7 @@ which-typed-array@^1.1.9:
     has-tostringtag "^1.0.0"
     is-typed-array "^1.1.10"
 
-wouter@*, wouter@^2.8.0-alpha.2:
+wouter@^2.8.0-alpha.2:
   version "2.10.0"
   resolved "https://registry.yarnpkg.com/wouter/-/wouter-2.10.0.tgz#9a664e6945fbf2fb80cd8bc839dfe7dbef7a4713"
   integrity sha512-4IoXysBk9c8qv+rkHW65K2joZbrios3NnWbp+FjCH26S3i8v8H4btgHQO33+g1CNDrSbdKkrtmbm80SLHxnRBw==
