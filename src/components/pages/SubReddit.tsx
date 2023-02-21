@@ -284,15 +284,13 @@ function Gallery({ images, nextPage }: { images: Array<PostData>; nextPage: Func
   );
 }
 
-export default function SubReddit({
-  sub,
-  listing,
-  period,
-}: {
-  sub: string;
-  listing: string;
-  period: string;
-}) {
+type Props = {
+  sub?: string;
+  listing?: string;
+  period?: string;
+};
+
+export default function SubReddit({ sub = 'all', listing = 'new', period = '' }: Props) {
   const { images, error, fetchMore, isLoading, hasMorePages } = useGalleryFetch(
     sub,
     listing,

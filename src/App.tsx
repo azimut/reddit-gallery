@@ -6,21 +6,28 @@ import SubReddit from './components/pages/SubReddit';
 import Welcome from './components/pages/Welcome';
 
 export default function App() {
+  const listings_periods = ['top', 'controversial'];
+  const listings = ['best', 'hot', 'new', 'random', 'rising'].concat(listings_periods);
+  const periods = ['hour', 'day', 'week', 'month', 'year', 'all'];
   return (
     <div className="App">
       <Route path="/" component={Welcome} />
 
-      <Route path="/r/:sub">
-        {(p) => <SubReddit sub={p.sub || 'all'} listing="new" period="" />}
-      </Route>
+      <Route path="/r/:sub">{(p) => <SubReddit sub={p.sub} />}</Route>
 
-      <Route path="/r/:sub/:listing">
-        {(p) => <SubReddit sub={p.sub || 'all'} listing={p.listing || 'new'} period="" />}
-      </Route>
+      {listings.map((listing) => (
+        <Route path={`/r/:sub/${listing}`}>
+          {(p) => <SubReddit sub={p.sub} listing={listing} />}
+        </Route>
+      ))}
 
-      <Route path="/r/:sub/top/:period">
-        {(p) => <SubReddit sub={p.sub || 'all'} listing="top" period={p.period || ''} />}
-      </Route>
+      {listings_periods.flatMap((listing) =>
+        periods.map((period) => (
+          <Route path={`/r/:sub/${listing}/${period}`}>
+            {(p) => <SubReddit sub={p.sub} listing={listing} period={period} />}
+          </Route>
+        )),
+      )}
 
       <Route path="/:default">
         <Redirect to="/" />
