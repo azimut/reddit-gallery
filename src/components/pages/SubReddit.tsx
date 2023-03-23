@@ -188,6 +188,7 @@ function DialogDescription({ post }: { post: PostData }) {
       <Anchor href={`https://old.reddit.com/user/${post.author}`}>
         {` u/${post.author} `}
       </Anchor>
+      <wbr />
       <time dateTime={format(end, 'yyyy-MM-dd HH:mm')}>{duration}</time>
     </figcaption>
   );
