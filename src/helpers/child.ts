@@ -14,7 +14,8 @@ export function redditThumbnail(child: Child): string {
   }
   if (child.data.url.includes('youtube.com/shorts/'))
     return `https://i.ytimg.com/vi/${child.data.url.split('/').pop()}/hqdefault.jpg`;
-  return '';
+
+  return `http://${child.data.domain}/favicon.ico`;
 }
 
 export function redditUrl(child: Child): string {
