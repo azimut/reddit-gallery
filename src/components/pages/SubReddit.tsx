@@ -132,19 +132,20 @@ function DialogMain({ post }: { post: PostData }) {
     return <YoutubeEmbed id={slicedPathname} start={t} />;
   }
 
-  if (['twitter.com', 'm.twitter.com'].includes(post.domain)) {
+  if (['twitter.com', 'm.twitter.com', 'mobile.twitter.com'].includes(post.domain)) {
     if (post.embed.length > 0) {
       return <IFrame src={post.embed} className="reddit-iframe" />;
     } else if (pathname.match('^/\\w+[/]?$')) {
       // is twitter username link
       return null;
     } else {
+      const tweetPath = pathname
+        .replace(/\/photo\/[0-9]$/, '')
+        .replace(/\/video\/[0-9]$/, '')
+        .replace(/\/retweets\/with_comments$/, '');
       return (
         <IFrame
-          src={`https://${NITTER_DOMAIN}${pathname.replace(
-            /\/photo\/[0-9]+$/,
-            '',
-          )}/embed`}
+          src={`https://${NITTER_DOMAIN}${tweetPath}/embed`}
           className="nitter-iframe"
         />
       );
