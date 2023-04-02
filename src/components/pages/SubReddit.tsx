@@ -125,6 +125,8 @@ function DialogMain({ post }: { post: PostData }) {
           alt={post.title}
         />
       );
+    if (pathname.includes('/live/'))
+      return <YoutubeEmbed id={`${pathname.split('/')[2]}`} start="" />;
   }
 
   if (post.domain === 'youtu.be') {
