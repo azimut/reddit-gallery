@@ -38,5 +38,12 @@ export default function VideoJS({ url }: { url: string }) {
     };
   }, [playerRef]);
 
+  useEffect(() => {
+    const player = playerRef.current;
+    if (player && !player.isDisposed()) {
+      player.src(url);
+    }
+  }, [url]);
+
   return <div data-vjs-player className="vidjs" ref={videoRef} />;
 }
