@@ -84,18 +84,15 @@ button:focus-visible {
   flex-direction: column;
   aspect-ratio: 4/3;
   cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  object-fit: cover;
 }
 @media (orientation: portrait) {
   .item {
     aspect-ratio: 1;
   }
-}
-
-.item img {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  flex: 1;
-  object-fit: cover;
 }
 
 .popup {

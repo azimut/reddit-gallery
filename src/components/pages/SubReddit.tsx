@@ -5,7 +5,7 @@ import { format, formatDistance, fromUnixTime } from 'date-fns';
 import '../../App.css';
 import { Reddit } from '../../types';
 import { API_LIMIT, NITTER_DOMAIN } from '../../constants';
-import { isImage } from '../../helpers/validators';
+import { isImage, isVideo } from '../../helpers/validators';
 import { redditUrl, redditThumbnailUrl } from '../../helpers/child';
 
 import useInfinity from '../../hooks/useInfinity';
@@ -274,18 +274,26 @@ function Gallery({ posts, nextPage }: { posts: Array<Post>; nextPage: Function }
       {posts.map(
         (post, i) =>
           (post.embed === '' && post.embed) || (
-            <div className="item" key={i}>
-              <img
-                onClick={() => onClickPost(i)}
-                alt={post.title}
-                src={(post.url.endsWith('.gif') && post.url) || post.thumb}
-              />
+            <div className="item" key={i} onClick={() => onClickPost(i)}>
+              <ThumbnailContent post={post} />
             </div>
           ),
       )}
       {posts.length > 0 && <Dialog open={open} post={content} onClick={closeDialog} />}
     </main>
   );
+}
+
+function ThumbnailContent({ post }: { post: Post }) {
+  if (post.url.endsWith('.gif')) {
+    return <img src={post.url} alt={post.title} />;
+  } else if (isImage(post.thumb)) {
+    return <img src={post.thumb} alt={post.title} />;
+  } else if (isVideo(post.thumb)) {
+    return <video loop muted autoPlay src={post.thumb} />;
+  } else {
+    return <p>{post.title}</p>;
+  }
 }
 
 type Props = {

@@ -2,7 +2,10 @@ import { Child } from '../types';
 import { isUrl, isImage } from './validators';
 import { decode } from 'html-entities';
 
-export function redditThumbnail(child: Child): string {
+export function redditThumbnailUrl(child: Child): string {
+  if (child.data.is_video && child.data.media?.reddit_video?.scrubber_media_url) {
+    return child.data.media?.reddit_video?.scrubber_media_url;
+  }
   if (isUrl(child.data.thumbnail)) {
     return child.data.thumbnail;
   }

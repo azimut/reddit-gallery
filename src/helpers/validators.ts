@@ -1,5 +1,9 @@
 export function isImage(url: string): boolean {
-  return (url.match('.jpg|.png|.jpeg|.gif|.svg|.webp|.tiff|.bmp') && true) || false;
+  return (url.match('.jpg|.png|.jpeg|.gif|.svg|.webp|.tiff|.bmp|.ico') && true) || false;
+}
+
+export function isVideo(url: string): boolean {
+  return (url.match('.mp4|.webm|.mkv') && true) || false;
 }
 
 export function isUrl(raw_url: string): boolean {
