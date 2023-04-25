@@ -6,7 +6,7 @@ import '../../App.css';
 import { Reddit } from '../../types';
 import { API_LIMIT, NITTER_DOMAIN } from '../../constants';
 import { isImage } from '../../helpers/validators';
-import { redditUrl, redditThumbnail } from '../../helpers/child';
+import { redditUrl, redditThumbnailUrl } from '../../helpers/child';
 
 import useInfinity from '../../hooks/useInfinity';
 import useFocus from '../../hooks/useFocus';
@@ -23,7 +23,7 @@ import IFrame from '../../components/atoms/IFrame';
 import Anchor from '../../components/atoms/Anchor';
 import Video from '../../components/atoms/Video';
 
-type PostData = {
+type Post = {
   author: string;
   created: number;
   domain: string;
@@ -37,7 +37,7 @@ type PostData = {
 };
 
 function useGalleryFetch(subreddit: string, listing: string, period: string) {
-  const [images, setImages] = useState<Array<PostData>>([]);
+  const [posts, setPosts] = useState<Array<Post>>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
   const [count, setCount] = useState(0);
@@ -52,7 +52,7 @@ function useGalleryFetch(subreddit: string, listing: string, period: string) {
       .then((subreddit: Reddit) => {
         setAfter(subreddit.data.after || '');
         setHasMorePages(subreddit.data.after !== null);
-        setImages((prev) => {
+        setPosts((prev) => {
           const next = subreddit.data.children
             .filter((i) => !i.data.is_self)
             .map((child) => ({
@@ -63,7 +63,7 @@ function useGalleryFetch(subreddit: string, listing: string, period: string) {
               num_comments: child.data.num_comments,
               permalink: `https://old.reddit.com${child.data.permalink}`,
               score: child.data.score,
-              thumb: redditThumbnail(child),
+              thumb: redditThumbnailUrl(child),
               title: decode(child.data.title),
               url: redditUrl(child),
             }));
@@ -74,10 +74,10 @@ function useGalleryFetch(subreddit: string, listing: string, period: string) {
       .catch(() => setError(true))
       .finally(() => setIsLoading(false));
   }, [trigger]);
-  return { images, isLoading, error, fetchMore, hasMorePages };
+  return { posts, isLoading, error, fetchMore, hasMorePages };
 }
 
-function DialogMain({ post }: { post: PostData }) {
+function DialogMain({ post }: { post: Post }) {
   if (post.url === '') return null;
   const { pathname, searchParams } = new URL(post.url);
   const slicedPathname = pathname.slice(1);
@@ -177,7 +177,7 @@ function DialogMain({ post }: { post: PostData }) {
   return null;
 }
 
-function DialogDescription({ post }: { post: PostData }) {
+function DialogDescription({ post }: { post: Post }) {
   const now = new Date();
   const end = fromUnixTime(post.created);
   const duration = formatDistance(end, now, { addSuffix: true });
@@ -203,7 +203,7 @@ function Dialog({
   onClick,
 }: {
   open: boolean;
-  post: PostData | null;
+  post: Post | null;
   onClick: () => void;
 }) {
   if (!post) return null;
@@ -219,18 +219,18 @@ function Dialog({
   );
 }
 
-function Gallery({ images, nextPage }: { images: Array<PostData>; nextPage: Function }) {
+function Gallery({ posts, nextPage }: { posts: Array<Post>; nextPage: Function }) {
   const [open, setOpen] = useState(false);
-  const [content, setContent] = useState<PostData | null>(null);
+  const [content, setContent] = useState<Post | null>(null);
   const [idx, setIdx] = useState(-1);
   const focusRef = useFocus();
 
   const nextItem = () => {
     setIdx((old) => {
-      if (old > Math.max(0, images.length - 5) && old <= Math.max(0, images.length)) {
+      if (old > Math.max(0, posts.length - 5) && old <= Math.max(0, posts.length)) {
         nextPage();
       }
-      return Math.min(old + 1, images.length - 1);
+      return Math.min(old + 1, posts.length - 1);
     });
   };
   const prevItem = () => {
@@ -246,14 +246,14 @@ function Gallery({ images, nextPage }: { images: Array<PostData>; nextPage: Func
     setOpen(false);
     focusRef.current?.focus();
   };
-  const onClickImage = (i: number) => setIdx(i);
-  useEffect(() => setContent(images[idx]), [idx]);
+  useEffect(() => setContent(posts[idx]), [idx]);
   useEffect(() => {
     !open && setIdx(-1);
   }, [open]);
   useEffect(() => {
     content && setOpen(true);
   }, [content]);
+  const onClickPost = (i: number) => setIdx(i);
   return (
     <main
       ref={focusRef}
@@ -271,19 +271,19 @@ function Gallery({ images, nextPage }: { images: Array<PostData>; nextPage: Func
         }
       }}
     >
-      {images.map(
-        (image, i) =>
-          (image.embed === '' && image.embed) || (
+      {posts.map(
+        (post, i) =>
+          (post.embed === '' && post.embed) || (
             <div className="item" key={i}>
               <img
-                onClick={() => onClickImage(i)}
-                alt={image.title}
-                src={(image.url.endsWith('.gif') && image.url) || image.thumb}
+                onClick={() => onClickPost(i)}
+                alt={post.title}
+                src={(post.url.endsWith('.gif') && post.url) || post.thumb}
               />
             </div>
           ),
       )}
-      {images.length > 0 && <Dialog open={open} post={content} onClick={closeDialog} />}
+      {posts.length > 0 && <Dialog open={open} post={content} onClick={closeDialog} />}
     </main>
   );
 }
@@ -295,20 +295,20 @@ type Props = {
 };
 
 export default function SubReddit({ sub = 'all', listing = 'new', period = '' }: Props) {
-  const { images, error, fetchMore, isLoading, hasMorePages } = useGalleryFetch(
+  const { posts, error, fetchMore, isLoading, hasMorePages } = useGalleryFetch(
     sub,
     listing,
     period,
   );
   const infinityRef = useInfinity({ onViewport: fetchMore, rootMargin: '100px' });
   if (error) return <p>Error!</p>;
-  if (images.length === 0) return <p> Loading... </p>;
+  if (posts.length === 0) return <p> Loading... </p>;
   return (
     <>
       <header>
         <h2>{`/r/${sub} (${listing})`}</h2>
       </header>
-      <Gallery images={images} nextPage={fetchMore} />
+      <Gallery posts={posts} nextPage={fetchMore} />
       {!isLoading && hasMorePages && <div ref={infinityRef}>Loading More...</div>}
     </>
   );
