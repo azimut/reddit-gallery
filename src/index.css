@@ -86,9 +86,17 @@ button:focus-visible {
   cursor: pointer;
   overflow: hidden;
   text-overflow: ellipsis;
-  flex: 1;
-  object-fit: cover;
 }
+
+.item img {
+  flex: 1;
+  object-fit: none;
+}
+
+.item video {
+  flex: 1;
+}
+
 @media (orientation: portrait) {
   .item {
     aspect-ratio: 1;
