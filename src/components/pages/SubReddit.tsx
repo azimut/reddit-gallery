@@ -208,14 +208,16 @@ function Dialog({
 }) {
   if (!post) return null;
   return (
-    <dialog open={open} className="popup" onClick={onClick}>
-      <small>[{post.score > 0 ? `+${post.score}` : post.score}] </small>
-      {post.title}
-      <figure>
-        <DialogMain post={post} />
-        <DialogDescription post={post} />
-      </figure>
-    </dialog>
+    <div onClick={onClick} className="backdrop">
+      <dialog open={open} className="popup" onClick={(e) => e.stopPropagation()}>
+        <small>[{post.score > 0 ? `+${post.score}` : post.score}] </small>
+        {post.title}
+        <figure>
+          <DialogMain post={post} />
+          <DialogDescription post={post} />
+        </figure>
+      </dialog>
+    </div>
   );
 }
 
