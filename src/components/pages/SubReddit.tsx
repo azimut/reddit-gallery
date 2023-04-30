@@ -22,6 +22,7 @@ import RedGifsEmbed from '../../components/molecules/RedGifsEmbed';
 import IFrame from '../../components/atoms/IFrame';
 import Anchor from '../../components/atoms/Anchor';
 import Video from '../../components/atoms/Video';
+import { useSwipeable } from 'react-swipeable';
 
 type Post = {
   author: string;
@@ -201,14 +202,22 @@ function Dialog({
   open,
   post,
   onClick,
+  onSwipedLeft,
+  onSwipedRight,
 }: {
   open: boolean;
   post: Post | null;
   onClick: () => void;
+  onSwipedLeft: () => void;
+  onSwipedRight: () => void;
 }) {
   if (!post) return null;
+  const handlers = useSwipeable({
+    onSwipedRight: onSwipedRight,
+    onSwipedLeft: onSwipedLeft,
+  });
   return (
-    <div onClick={onClick} className="backdrop">
+    <div {...handlers} onClick={onClick} className="backdrop">
       <dialog open={open} className="popup" onClick={(e) => e.stopPropagation()}>
         <small>[{post.score > 0 ? `+${post.score}` : post.score}] </small>
         {post.title}
@@ -227,7 +236,7 @@ function Gallery({ posts, nextPage }: { posts: Array<Post>; nextPage: Function }
   const [idx, setIdx] = useState(-1);
   const focusRef = useFocus();
 
-  const nextItem = () => {
+  const nextPost = () => {
     setIdx((old) => {
       if (old > Math.max(0, posts.length - 5) && old <= Math.max(0, posts.length)) {
         nextPage();
@@ -235,7 +244,7 @@ function Gallery({ posts, nextPage }: { posts: Array<Post>; nextPage: Function }
       return Math.min(old + 1, posts.length - 1);
     });
   };
-  const prevItem = () => {
+  const prevPost = () => {
     setIdx((old) => {
       if (old === 0) {
         closeDialog();
@@ -263,10 +272,10 @@ function Gallery({ posts, nextPage }: { posts: Array<Post>; nextPage: Function }
       className="gallery"
       onKeyDown={(e) => {
         if (['ArrowRight', 'Period'].includes(e.code)) {
-          nextItem();
+          nextPost();
         }
         if (['ArrowLeft', 'Comma'].includes(e.code)) {
-          prevItem();
+          prevPost();
         }
         if (['KeyQ', 'Escape'].includes(e.code)) {
           closeDialog();
@@ -281,7 +290,15 @@ function Gallery({ posts, nextPage }: { posts: Array<Post>; nextPage: Function }
             </div>
           ),
       )}
-      {posts.length > 0 && <Dialog open={open} post={content} onClick={closeDialog} />}
+      {posts.length > 0 && (
+        <Dialog
+          open={open}
+          post={content}
+          onClick={closeDialog}
+          onSwipedLeft={nextPost}
+          onSwipedRight={prevPost}
+        />
+      )}
     </main>
   );
 }
