@@ -16,14 +16,14 @@ export default function App() {
       <Route path="/r/:sub">{(p) => <SubReddit sub={p.sub} />}</Route>
 
       {listings.map((listing) => (
-        <Route path={`/r/:sub/${listing}`}>
+        <Route key={listing} path={`/r/:sub/${listing}`}>
           {(p) => <SubReddit sub={p.sub} listing={listing} />}
         </Route>
       ))}
 
       {listings_periods.flatMap((listing) =>
         periods.map((period) => (
-          <Route path={`/r/:sub/${listing}/${period}`}>
+          <Route key={`${listing}/${period}`} path={`/r/:sub/${listing}/${period}`}>
             {(p) => <SubReddit sub={p.sub} listing={listing} period={period} />}
           </Route>
         )),
