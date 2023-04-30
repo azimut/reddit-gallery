@@ -92,6 +92,12 @@ button:focus-visible {
   flex: 1;
   object-fit: none;
 }
+@media (orientation: portrait) {
+  .item img {
+    flex: 1;
+    object-fit: cover;
+  }
+}
 
 .item video {
   flex: 1;
