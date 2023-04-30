@@ -163,7 +163,15 @@ function Dialog({
   });
   return (
     <div {...handlers} onClick={onClick} className="backdrop">
-      <dialog open={open} className="popup" onClick={(e) => e.stopPropagation()}>
+      <dialog
+        open={open}
+        className="popup"
+        onClick={(e) => {
+          if (!isImage(post.url)) {
+            e.stopPropagation();
+          }
+        }}
+      >
         <small>[{post.score > 0 ? `+${post.score}` : post.score}] </small>
         {post.title}
         <figure>
