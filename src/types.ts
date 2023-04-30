@@ -300,3 +300,16 @@ export enum SubredditType {
 export enum Kind {
   T3 = 't3',
 }
+
+export type Post = {
+  author: string;
+  created: number;
+  domain: string;
+  embed: string;
+  num_comments: number;
+  permalink: string;
+  score: number;
+  thumb: string;
+  title: string;
+  url: string;
+};

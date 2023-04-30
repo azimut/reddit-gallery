@@ -1,13 +1,13 @@
-import { useEffect, useReducer, useState } from 'react';
-import { decode } from 'html-entities';
 import { format, formatDistance, fromUnixTime } from 'date-fns';
+import { useEffect, useState } from 'react';
+import { useSwipeable } from 'react-swipeable';
+
+import { NITTER_DOMAIN } from '../../constants';
+import { isImage, isVideo } from '../../helpers/validators';
 
 import '../../App.css';
-import { Reddit } from '../../types';
-import { API_LIMIT, NITTER_DOMAIN } from '../../constants';
-import { isImage, isVideo } from '../../helpers/validators';
-import { redditUrl, redditThumbnailUrl } from '../../helpers/child';
-
+import { Post } from '../../types';
+import useGalleryFetch from './useGalleryFetch';
 import useInfinity from '../../hooks/useInfinity';
 import useFocus from '../../hooks/useFocus';
 import VideoJS from '../../components/molecules/VideoJS';
@@ -22,61 +22,6 @@ import RedGifsEmbed from '../../components/molecules/RedGifsEmbed';
 import IFrame from '../../components/atoms/IFrame';
 import Anchor from '../../components/atoms/Anchor';
 import Video from '../../components/atoms/Video';
-import { useSwipeable } from 'react-swipeable';
-
-type Post = {
-  author: string;
-  created: number;
-  domain: string;
-  embed: string;
-  num_comments: number;
-  permalink: string;
-  score: number;
-  thumb: string;
-  title: string;
-  url: string;
-};
-
-function useGalleryFetch(subreddit: string, listing: string, period: string) {
-  const [posts, setPosts] = useState<Array<Post>>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(false);
-  const [count, setCount] = useState(0);
-  const [after, setAfter] = useState('');
-  const [trigger, fetchMore] = useReducer((t) => !t, false);
-  const [hasMorePages, setHasMorePages] = useState(false);
-  const url = `https://www.reddit.com/r/${subreddit}/${listing}/.json?limit=${API_LIMIT}&count=${count}&after=${after}&t=${period}`;
-  useEffect(() => {
-    setIsLoading(true);
-    fetch(url)
-      .then((res) => res.json())
-      .then((subreddit: Reddit) => {
-        setAfter(subreddit.data.after || '');
-        setHasMorePages(subreddit.data.after !== null);
-        setPosts((prev) => {
-          const next = subreddit.data.children
-            .filter((i) => !i.data.is_self)
-            .map((child) => ({
-              author: child.data.author,
-              created: child.data.created_utc,
-              domain: child.data.domain,
-              embed: child.data.secure_media_embed?.media_domain_url || '',
-              num_comments: child.data.num_comments,
-              permalink: `https://old.reddit.com${child.data.permalink}`,
-              score: child.data.score,
-              thumb: redditThumbnailUrl(child),
-              title: decode(child.data.title),
-              url: redditUrl(child),
-            }));
-          return (count === 0 && next) || prev.concat(next);
-        });
-        setCount((prevCount) => prevCount + API_LIMIT);
-      })
-      .catch(() => setError(true))
-      .finally(() => setIsLoading(false));
-  }, [trigger]);
-  return { posts, isLoading, error, fetchMore, hasMorePages };
-}
 
 function DialogMain({ post }: { post: Post }) {
   if (post.url === '') return null;
@@ -235,7 +180,10 @@ function Gallery({ posts, nextPage }: { posts: Array<Post>; nextPage: Function }
   const [content, setContent] = useState<Post | null>(null);
   const [idx, setIdx] = useState(-1);
   const focusRef = useFocus();
-
+  const closeDialog = () => {
+    setOpen(false);
+    focusRef.current?.focus();
+  };
   const nextPost = () => {
     setIdx((old) => {
       if (old > Math.max(0, posts.length - 5) && old <= Math.max(0, posts.length)) {
@@ -252,10 +200,6 @@ function Gallery({ posts, nextPage }: { posts: Array<Post>; nextPage: Function }
       }
       return Math.max(0, old - 1);
     });
-  };
-  const closeDialog = () => {
-    setOpen(false);
-    focusRef.current?.focus();
   };
   useEffect(() => setContent(posts[idx]), [idx]);
   useEffect(() => {
