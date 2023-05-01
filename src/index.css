@@ -198,6 +198,11 @@ button:focus-visible {
   aspect-ratio: 4 / 4.1;
   max-width: 550px;
 }
+@media (min-width: 1200px) {
+  .reddit-iframe {
+    width: 90vw;
+  }
+}
 
 .nitter-iframe {
   width: 90vw;
