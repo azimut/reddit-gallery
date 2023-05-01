@@ -198,9 +198,9 @@ button:focus-visible {
   aspect-ratio: 4 / 4.1;
   max-width: 550px;
 }
-@media (min-width: 1200px) {
+@media (orientation: portrait) {
   .reddit-iframe {
-    width: 90vw;
+    width: 95vw;
   }
 }
 
