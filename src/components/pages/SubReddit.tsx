@@ -158,6 +158,7 @@ function Dialog({
 }) {
   if (!post) return null;
   const handlers = useSwipeable({
+    preventScrollOnSwipe: true,
     onSwipedRight: onSwipedRight,
     onSwipedLeft: onSwipedLeft,
   });
