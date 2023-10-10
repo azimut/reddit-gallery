@@ -80,7 +80,9 @@ function DialogMain({ post }: { post: Post }) {
     return <YoutubeEmbed id={slicedPathname} start={t} />;
   }
 
-  if (['twitter.com', 'm.twitter.com', 'mobile.twitter.com'].includes(post.domain)) {
+  if (
+    ['twitter.com', 'm.twitter.com', 'mobile.twitter.com', 'x.com'].includes(post.domain)
+  ) {
     if (post.embed.length > 0) {
       return <IFrame src={post.embed} className="reddit-iframe" />;
     } else if (pathname.match('^/\\w+[/]?$')) {
