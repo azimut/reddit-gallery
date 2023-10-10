@@ -2,8 +2,6 @@ import { format, formatDistance, fromUnixTime } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { useSwipeable } from 'react-swipeable';
 import { Tweet } from 'react-tweet';
-
-import { NITTER_DOMAIN } from '../../constants';
 import { isImage, isVideo } from '../../helpers/validators';
 
 import '../../App.css';
@@ -42,8 +40,6 @@ function DialogMain({ post }: { post: Post }) {
       return <StreamableEmbed id={slicedPathname} />;
     case 'gfycat.com':
       return <GfycatEmbed url={post.url} />;
-    case 'clips.twitch.tv':
-      return <TwitchClipEmbed clip={slicedPathname} />;
     case 'redgifs.com':
       return <RedGifsEmbed id={pathname.split('/').reverse()[0]} />;
     case 'vocaroo.com':
@@ -67,46 +63,27 @@ function DialogMain({ post }: { post: Post }) {
       if (pathname.includes('/live/'))
         return <YoutubeEmbed id={`${pathname.split('/')[2]}`} t={t} />;
       break; // NOTE: we don't know how to handle /shorts/
-  }
-
-  if (
-    ['www.twitch.tv', 'twitch.tv'].includes(post.domain) &&
-    pathname.split('/')[2] === 'clip'
-  ) {
-    return <TwitchClipEmbed clip={pathname.split('/')[3]} />;
-  }
-  if (
-    ['www.twitch.tv', 'twitch.tv'].includes(post.domain) &&
-    pathname.split('/')[1] === 'videos' &&
-    searchParams.get('t')
-  ) {
-    const t = searchParams.get('t');
-    if (t) return <TwitchEmbed video={pathname.split('/')[2]} time={t} />;
-  }
-
-  if (
-    ['twitter.com', 'm.twitter.com', 'mobile.twitter.com', 'x.com'].includes(post.domain)
-  ) {
-    if (post.embed.length > 0) {
-      return <IFrame src={post.embed} className="reddit-iframe" />;
-    } else if (pathname.match('^/\\w+[/]?$')) {
-      // is twitter username link
-      return null;
-    } else if (pathname.includes('/status/')) {
-      const tweetId = pathname.split('/')[3];
-      return <Tweet id={tweetId} />;
-    } else {
-      const tweetPath = pathname
-        .replace(/\/photo\/[0-9]$/, '')
-        .replace(/\/video\/[0-9]$/, '')
-        .replace(/\/retweets\/with_comments$/, '');
-      return (
-        <IFrame
-          src={`https://${NITTER_DOMAIN}${tweetPath}/embed`}
-          className="nitter-iframe"
-        />
-      );
-    }
+    case 'clips.twitch.tv':
+      return <TwitchClipEmbed clip={slicedPathname} />;
+    case 'www.twitch.tv':
+    case 'twitch.tv:':
+      if (pathname.includes('/clip/'))
+        return <TwitchClipEmbed clip={pathname.split('/')[3]} />;
+      if (pathname.includes('/videos/'))
+        return (
+          <TwitchEmbed video={pathname.split('/')[2]} time={searchParams.get('t')} />
+        );
+      break; // NOTE: it can be a link to a channel?
+    case 'twitter.com':
+    case 'm.twitter.com':
+    case 'mobile.twitter.com':
+    case 'x.com':
+    case 'vxtwitter.com':
+      if (post.embed.length > 0)
+        return <IFrame src={post.embed} className="reddit-iframe" />;
+      else if (pathname.includes('/status/'))
+        return <Tweet id={pathname.split('/')[3]} />;
+      break; // NOTE: could be a twitter username link
   }
 
   if (
