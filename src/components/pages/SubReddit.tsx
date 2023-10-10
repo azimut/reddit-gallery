@@ -46,12 +46,12 @@ function DialogMain({ post }: { post: Post }) {
     case 'voca.ro':
       return <VocarooEmbed id={slicedPathname} />;
     case 'youtu.be':
-      return <YoutubeEmbed id={slicedPathname} t={searchParams.get('t') || ''} />;
+      return <YoutubeEmbed id={slicedPathname} t={searchParams.get('t')} />;
     case 'youtube.com':
     case 'www.youtube.com':
     case 'm.youtube.com':
       const v = searchParams.get('v');
-      const t = searchParams.get('t') || '';
+      const t = searchParams.get('t');
       if (v) return <YoutubeEmbed id={v} t={t} />;
       if (pathname.includes('/shorts/'))
         return (
@@ -84,23 +84,19 @@ function DialogMain({ post }: { post: Post }) {
       else if (pathname.includes('/status/'))
         return <Tweet id={pathname.split('/')[3]} />;
       break; // NOTE: could be a twitter username link
+    case 'imgflip.com':
+      return (
+        <img src={`https://i.imgflip.com/${pathname.slice(3)}.jpg`} alt={post.title} />
+      );
+    case 'i.imgur.com':
+      if (pathname.endsWith('.gifv'))
+        return <Video url={post.url.replace(/\.gifv/, '.mp4')} />;
+      break; // NOTE: only handles .gifv
+    case 'imgur.com':
+      if (pathname.match(/^\/[0-9a-zA-Z]+$/))
+        return <img src={`${post.url}.jpg`} alt={post.title} />;
+      break; // NOTE: only handles some links
   }
-
-  if (
-    post.domain === 'imgur.com' &&
-    slicedPathname.split('/').length === 1 &&
-    !isImage(pathname)
-  ) {
-    return <img src={`${post.url}.jpg`} alt={post.title} />;
-  }
-  if (post.domain === 'i.imgur.com' && pathname.endsWith('.gifv')) {
-    return <Video url={post.url.replace(/\.gifv/, '.mp4')} />;
-  }
-
-  if (post.domain === 'imgflip.com' && !isImage(pathname))
-    return (
-      <img src={`https://i.imgflip.com/${pathname.slice(3)}.jpg`} alt={post.title} />
-    );
 
   if (isImage(pathname)) return <img src={post.url} alt={post.title} />;
   if (isImage(post.thumb))
@@ -210,14 +206,19 @@ function Gallery({ posts, nextPage }: { posts: Array<Post>; nextPage: Function }
       tabIndex={0}
       className="gallery"
       onKeyDown={(e) => {
-        if (['ArrowRight', 'Period'].includes(e.code)) {
-          nextPost();
-        }
-        if (['ArrowLeft', 'Comma'].includes(e.code)) {
-          prevPost();
-        }
-        if (['KeyQ', 'Escape'].includes(e.code)) {
-          closeDialog();
+        switch (e.code) {
+          case 'ArrowRight':
+          case 'Period':
+            nextPost();
+            break;
+          case 'ArrowLeft':
+          case 'Comma':
+            prevPost();
+            break;
+          case 'KeyQ':
+          case 'Escape':
+            closeDialog();
+            break;
         }
       }}
     >

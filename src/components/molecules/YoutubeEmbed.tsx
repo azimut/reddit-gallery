@@ -1,10 +1,9 @@
 import IFrame from '../atoms/IFrame';
 
 // https://developers.google.com/youtube/player_parameters
-export default function YoutubeEmbed({ id, t }: { id: string; t: string }) {
+export default function YoutubeEmbed({ id, t }: { id: string; t: string | null }) {
   let url = `https://www.youtube-nocookie.com/embed/${id}?modestbranding=1&rel=0&iv_load_policy=3&cc_load_policy=1&autoplay=0`;
-  let start = startToSeconds(t);
-  if (start > 0) url += `&start=${start}`;
+  if (t) url += `&start=${startToSeconds(t)}`;
   return <IFrame src={url} />;
 }
 
