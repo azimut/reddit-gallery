@@ -33,18 +33,23 @@ function DialogMain({ post }: { post: Post }) {
     return <Video url={post.url} />;
   }
 
-  if (['vocaroo.com', 'voca.ro'].includes(post.domain))
-    return <VocarooEmbed id={slicedPathname} />;
-  if (post.domain === 'redgifs.com')
-    return <RedGifsEmbed id={pathname.split('/').reverse()[0]} />;
-
-  if (post.domain === 'giphy.com') return <GiphyEmbed path={pathname} />;
-  if (post.domain === 'v.redd.it') {
-    return <VideoJS url={post.url} />;
+  switch (post.domain) {
+    case 'giphy.com':
+      return <GiphyEmbed path={pathname} />;
+    case 'v.redd.it':
+      return <VideoJS url={post.url} />;
+    case 'streamable.com':
+      return <StreamableEmbed id={slicedPathname} />;
+    case 'gfycat.com':
+      return <GfycatEmbed url={post.url} />;
+    case 'clips.twitch.tv':
+      return <TwitchClipEmbed clip={slicedPathname} />;
+    case 'redgifs.com':
+      return <RedGifsEmbed id={pathname.split('/').reverse()[0]} />;
+    case 'vocaroo.com':
+    case 'voca.ro':
+      return <VocarooEmbed id={slicedPathname} />;
   }
-  if (post.domain === 'streamable.com') return <StreamableEmbed id={slicedPathname} />;
-  if (post.domain === 'gfycat.com') return <GfycatEmbed url={post.url} />;
-  if (post.domain === 'clips.twitch.tv') return <TwitchClipEmbed clip={slicedPathname} />;
 
   if (
     ['www.twitch.tv', 'twitch.tv'].includes(post.domain) &&
