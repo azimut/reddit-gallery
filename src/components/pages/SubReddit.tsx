@@ -49,6 +49,24 @@ function DialogMain({ post }: { post: Post }) {
     case 'vocaroo.com':
     case 'voca.ro':
       return <VocarooEmbed id={slicedPathname} />;
+    case 'youtu.be':
+      return <YoutubeEmbed id={slicedPathname} t={searchParams.get('t') || ''} />;
+    case 'youtube.com':
+    case 'www.youtube.com':
+    case 'm.youtube.com':
+      const v = searchParams.get('v');
+      const t = searchParams.get('t') || '';
+      if (v) return <YoutubeEmbed id={v} t={t} />;
+      if (pathname.includes('/shorts/'))
+        return (
+          <img
+            src={`https://i.ytimg.com/vi/${pathname.split('/')[2]}/hqdefault.jpg`}
+            alt={post.title}
+          />
+        );
+      if (pathname.includes('/live/'))
+        return <YoutubeEmbed id={`${pathname.split('/')[2]}`} t={t} />;
+      break; // NOTE: we don't know how to handle /shorts/
   }
 
   if (
@@ -64,26 +82,6 @@ function DialogMain({ post }: { post: Post }) {
   ) {
     const t = searchParams.get('t');
     if (t) return <TwitchEmbed video={pathname.split('/')[2]} time={t} />;
-  }
-
-  if (['youtube.com', 'www.youtube.com', 'm.youtube.com'].includes(post.domain)) {
-    const v = searchParams.get('v');
-    const t = searchParams.get('t')?.replace(/s$/, '');
-    if (v) return <YoutubeEmbed id={v} start={t} />;
-    if (pathname.includes('/shorts/'))
-      return (
-        <img
-          src={`https://i.ytimg.com/vi/${pathname.split('/')[2]}/hqdefault.jpg`}
-          alt={post.title}
-        />
-      );
-    if (pathname.includes('/live/'))
-      return <YoutubeEmbed id={`${pathname.split('/')[2]}`} start="" />;
-  }
-
-  if (post.domain === 'youtu.be') {
-    const t = searchParams.get('t')?.replace(/s$/, '');
-    return <YoutubeEmbed id={slicedPathname} start={t} />;
   }
 
   if (
