@@ -1,6 +1,7 @@
 import { format, formatDistance, fromUnixTime } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { useSwipeable } from 'react-swipeable';
+import { Tweet } from 'react-tweet';
 
 import { NITTER_DOMAIN } from '../../constants';
 import { isImage, isVideo } from '../../helpers/validators';
@@ -88,6 +89,9 @@ function DialogMain({ post }: { post: Post }) {
     } else if (pathname.match('^/\\w+[/]?$')) {
       // is twitter username link
       return null;
+    } else if (pathname.includes('/status/')) {
+      const tweetId = pathname.split('/')[3];
+      return <Tweet id={tweetId} />;
     } else {
       const tweetPath = pathname
         .replace(/\/photo\/[0-9]$/, '')
