@@ -53,13 +53,10 @@ function DialogMain({ post }: { post: Post }) {
       const v = searchParams.get('v');
       const t = searchParams.get('t');
       if (v) return <YoutubeEmbed id={v} t={t} />;
-      if (pathname.includes('/shorts/'))
-        return (
-          <img
-            src={`https://i.ytimg.com/vi/${pathname.split('/')[2]}/hqdefault.jpg`}
-            alt={post.title}
-          />
-        );
+      if (pathname.includes('/shorts/')) {
+          const videoid = ${pathname.split('/')[2]};
+          return <YoutubeEmbed id={videoid} t={t} />;
+      }
       if (pathname.includes('/live/'))
         return <YoutubeEmbed id={`${pathname.split('/')[2]}`} t={t} />;
       break; // NOTE: we don't know how to handle /shorts/
