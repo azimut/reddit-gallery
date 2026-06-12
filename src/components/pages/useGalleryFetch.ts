@@ -16,7 +16,7 @@ export default function useGalleryFetch(
   const [after, setAfter] = useState('');
   const [trigger, fetchMore] = useReducer((t) => !t, false);
   const [hasMorePages, setHasMorePages] = useState(false);
-  const url = `https://www.reddit.com/r/${subreddit}/${listing}/.json?limit=${API_LIMIT}&count=${count}&after=${after}&t=${period}`;
+  const url = `https://api.reddit.com/r/${subreddit}/${listing}/.json?limit=${API_LIMIT}&count=${count}&after=${after}&t=${period}`;
   useEffect(() => {
     setIsLoading(true);
     fetch(url)
