@@ -54,7 +54,7 @@ function DialogMain({ post }: { post: Post }) {
       const t = searchParams.get('t');
       if (v) return <YoutubeEmbed id={v} t={t} />;
       if (pathname.includes('/shorts/')) {
-          const videoid = ${pathname.split('/')[2]};
+          const videoid = pathname.split('/')[2];
           return <YoutubeEmbed id={videoid} t={t} />;
       }
       if (pathname.includes('/live/'))
